@@ -7,12 +7,12 @@
 #include "Renderer.hpp"
 #include <SDL3/SDL_events.h>
 
-void Scene01Clear::Load() {
+void Scene01Clear::Load(Renderer& renderer) {
 
 }
 
 bool Scene01Clear::Update(float dt) {
-    return ManageInput();
+    return ManageInput(inputState);
 }
 
 void Scene01Clear::Draw(Renderer& renderer) {

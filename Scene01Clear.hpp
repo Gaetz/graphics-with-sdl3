@@ -9,13 +9,13 @@
 
 class Scene01Clear : public Scene {
 public:
-    void Load() override;
+    void Load(Renderer& renderer) override;
     bool Update(float dt) override;
     void Draw(Renderer& renderer) override;
     void Unload() override;
 
 private:
-    void UpdateInput();
+    InputState inputState;
 };
 
 

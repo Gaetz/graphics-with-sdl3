@@ -8,6 +8,7 @@
 
 #include "Renderer.hpp"
 #include "Scene01Clear.hpp"
+#include "Scene02Triangle.hpp"
 #include "Time.hpp"
 #include "Window.hpp"
 
@@ -20,8 +21,8 @@ int main(int argc, char **argv) {
     window.Init();
     renderer.Init(window);
 
-    Scene *scene = new Scene01Clear();
-    scene->Load();
+    Scene *scene = new Scene02Triangle();
+    scene->Load(renderer);
 
     bool isRunning = true;
     while (isRunning) {
