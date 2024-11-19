@@ -4,6 +4,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 cmake_policy(SET CMP0135 NEW)
+
+# SDL3
 set(SDL3_VERSION 3.1.6)
 find_package(SDL3 ${SDL3_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT SDL3_FOUND) # If there's none, fetch and build SDL3
@@ -31,6 +33,8 @@ if (NOT SDL3_FOUND) # If there's none, fetch and build SDL3
         FetchContent_MakeAvailable(SDL3)
     endif()
 endif()
+
+# SDL3_image
 
 file( GLOB graphics-with-SDL3_SOURCES *.cpp )
 #add_library( ${PROJECT_NAME} ${graphics-with-SDL3_SOURCES} )
