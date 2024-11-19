@@ -13,17 +13,22 @@ if (NOT SDL3_FOUND) # If there's none, fetch and build SDL3
                 SDL3
                 URL https://github.com/libsdl-org/SDL/archive/refs/tags/preview-${SDL3_VERSION}.tar.gz
         )
+        FetchContent_MakeAvailable(SDL3)
+
+        #FetchContent_GetProperties(SDL3)
+        #if (NOT SDL3_POPULATED) # Have we downloaded raylib yet?
+        #    set(FETCHCONTENT_QUIET NO)
+        #    FetchContent_Populate(SDL3)
+        #    message(STATUS "SDL3_SOURCE_DIR: ${SDL3_SOURCE_DIR}")
+        #    message(STATUS "SDL3_BINARY_DIR: ${SDL3_BINARY_DIR}")
+        #    add_subdirectory(${SDL3_SOURCE_DIR} ${SDL3_BINARY_DIR})
+        #endif()
     elseif (WIN32)
         FetchContent_Declare(
                 SDL3
                 URL https://github.com/libsdl-org/SDL/archive/refs/tags/preview-${SDL3_VERSION}.zip
         )
-    endif()
-    FetchContent_GetProperties(SDL3)
-    if (NOT SDL3_POPULATED) # Have we downloaded raylib yet?
-        set(FETCHCONTENT_QUIET NO)
-        FetchContent_Populate(SDL3)
-        add_subdirectory(${SDL3_SOURCE_DIR} ${SDL3_BINARY_DIR})
+        FetchContent_MakeAvailable(SDL3)
     endif()
 endif()
 
