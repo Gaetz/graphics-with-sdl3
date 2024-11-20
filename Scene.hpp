@@ -13,10 +13,14 @@ class Renderer;
 class Scene {
 public:
     virtual ~Scene() {}
-    void virtual Load(Renderer& renderer) = 0;
-    bool virtual Update(float dt) = 0;
-    void virtual Draw(Renderer& renderer) = 0;
-    void virtual Unload() = 0;
+
+    virtual void Load(Renderer& renderer) = 0;
+
+    virtual bool Update(float dt) = 0;
+
+    virtual void Draw(Renderer& renderer) = 0;
+
+    virtual void Unload() = 0;
 
 protected:
     static bool ManageInput(InputState &inputState) {

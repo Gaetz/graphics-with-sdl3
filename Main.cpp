@@ -3,13 +3,13 @@
 //
 
 #include <iostream>
-#include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 
 #include "Renderer.hpp"
 #include "Scene01Clear.hpp"
 #include "Scene02Triangle.hpp"
 #include "Scene03TriangleVertexBuffer.hpp"
+#include "Scene04TriangleCullModes.hpp"
 #include "Time.hpp"
 #include "Window.hpp"
 
@@ -18,14 +18,14 @@ using namespace std;
 int main(int argc, char **argv) {
     Window window {};
     Renderer renderer {};
-    Time time;
+    Time time {};
     window.Init();
     renderer.Init(window);
 
-    Scene *scene = new Scene03TriangleVertexBuffer();
+    auto scene = std::make_unique<Scene04TriangleCullModes>();
     scene->Load(renderer);
 
-    bool isRunning = true;
+    bool isRunning { true };
     while (isRunning) {
         const float dt = time.ComputeDeltaTime();
 
