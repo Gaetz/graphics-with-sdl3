@@ -26,15 +26,15 @@ void Scene02Triangle::Load(Renderer& renderer) {
     };
 
     pipelineCreateInfo.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
-    FillPipeline = SDL_CreateGPUGraphicsPipeline(renderer.device, &pipelineCreateInfo);
-    if (FillPipeline == nullptr)
+    fillPipeline = SDL_CreateGPUGraphicsPipeline(renderer.device, &pipelineCreateInfo);
+    if (fillPipeline == nullptr)
     {
         SDL_Log("Failed to create fill pipeline!");
     }
 
     pipelineCreateInfo.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_LINE;
-    LinePipeline = SDL_CreateGPUGraphicsPipeline(renderer.device, &pipelineCreateInfo);
-    if (LinePipeline == nullptr)
+    linePipeline = SDL_CreateGPUGraphicsPipeline(renderer.device, &pipelineCreateInfo);
+    if (linePipeline == nullptr)
     {
         SDL_Log("Failed to create line pipeline!");
     }
@@ -54,13 +54,13 @@ bool Scene02Triangle::Update(float dt) {
     const bool isRunning = ManageInput(inputState);
 
     if (inputState.left) {
-        UseWireframeMode = !UseWireframeMode;
+        useWireframeMode = !useWireframeMode;
     }
     if (inputState.down) {
-        UseSmallViewport = !UseSmallViewport;
+        useSmallViewport = !useSmallViewport;
     }
     if (inputState.right) {
-        UseScissorRect = !UseScissorRect;
+        useScissorRect = !useScissorRect;
     }
 
     return isRunning;
@@ -69,12 +69,12 @@ bool Scene02Triangle::Update(float dt) {
 void Scene02Triangle::Draw(Renderer& renderer) {
     renderer.Begin();
 
-    renderer.BindGraphicsPipeline(UseWireframeMode ? LinePipeline : FillPipeline);
-    if (UseSmallViewport) {
-        renderer.SetGPUViewport(SmallViewport);
+    renderer.BindGraphicsPipeline(useWireframeMode ? linePipeline : fillPipeline);
+    if (useSmallViewport) {
+        renderer.SetGPUViewport(smallViewport);
     }
-    if (UseScissorRect) {
-        renderer.SetGPUScissorRect(ScissorRect);
+    if (useScissorRect) {
+        renderer.SetGPUScissorRect(scissorRect);
     }
     renderer.DrawGPUPrimitive(3, 1, 0, 0);
 

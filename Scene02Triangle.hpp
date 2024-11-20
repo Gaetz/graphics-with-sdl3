@@ -20,14 +20,14 @@ private:
     const char* basePath;
     SDL_GPUShader* vertexShader;
     SDL_GPUShader* fragmentShader;
-    SDL_GPUGraphicsPipeline* FillPipeline;
-    SDL_GPUGraphicsPipeline* LinePipeline;
-    SDL_GPUViewport SmallViewport = { 160, 120, 320, 240, 0.1f, 1.0f };
-    SDL_Rect ScissorRect = { 320, 240, 320, 240 };
+    SDL_GPUGraphicsPipeline* fillPipeline;
+    SDL_GPUGraphicsPipeline* linePipeline;
+    SDL_GPUViewport smallViewport = {160, 120, 320, 240, 0.1f, 1.0f };
+    SDL_Rect scissorRect = {320, 240, 320, 240 };
 
-    bool UseWireframeMode = false;
-    bool UseSmallViewport = false;
-    bool UseScissorRect = false;
+    bool useWireframeMode = false;
+    bool useSmallViewport = false;
+    bool useScissorRect = false;
 };
 
 

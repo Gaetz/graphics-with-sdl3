@@ -14,7 +14,7 @@ struct SpriteVertex
 };
 
 StructuredBuffer<SpriteComputeData> ComputeBuffer : register(t0, space0);
-RWStructuredBuffer<SpriteVertex> VertexBuffer : register(u0, space1);
+RWStructuredBuffer<SpriteVertex> vertexBuffer : register(u0, space1);
 
 [numthreads(64, 1, 1)]
 void main(uint3 GlobalInvocationID : SV_DispatchThreadID)
@@ -54,18 +54,18 @@ void main(uint3 GlobalInvocationID : SV_DispatchThreadID)
     float4 bottomLeft = float4(0.0f, 1.0f, 0.0f, 1.0f);
     float4 bottomRight = float4(1.0f, 1.0f, 0.0f, 1.0f);
 
-    VertexBuffer[n * 4u]    .position = mul(topLeft, Model);
-    VertexBuffer[n * 4u + 1].position = mul(topRight, Model);
-    VertexBuffer[n * 4u + 2].position = mul(bottomLeft, Model);
-    VertexBuffer[n * 4u + 3].position = mul(bottomRight, Model);
+    vertexBuffer[n * 4u]    .position = mul(topLeft, Model);
+    vertexBuffer[n * 4u + 1].position = mul(topRight, Model);
+    vertexBuffer[n * 4u + 2].position = mul(bottomLeft, Model);
+    vertexBuffer[n * 4u + 3].position = mul(bottomRight, Model);
 
-    VertexBuffer[n * 4u]    .texcoord = float2(0.0f, 0.0f);
-    VertexBuffer[n * 4u + 1].texcoord = float2(1.0f, 0.0f);
-    VertexBuffer[n * 4u + 2].texcoord = float2(0.0f, 1.0f);
-    VertexBuffer[n * 4u + 3].texcoord = float2(1.0f, 1.0f);
+    vertexBuffer[n * 4u]    .texcoord = float2(0.0f, 0.0f);
+    vertexBuffer[n * 4u + 1].texcoord = float2(1.0f, 0.0f);
+    vertexBuffer[n * 4u + 2].texcoord = float2(0.0f, 1.0f);
+    vertexBuffer[n * 4u + 3].texcoord = float2(1.0f, 1.0f);
 
-    VertexBuffer[n * 4u]    .color = currentSpriteData.color;
-    VertexBuffer[n * 4u + 1].color = currentSpriteData.color;
-    VertexBuffer[n * 4u + 2].color = currentSpriteData.color;
-    VertexBuffer[n * 4u + 3].color = currentSpriteData.color;
+    vertexBuffer[n * 4u]    .color = currentSpriteData.color;
+    vertexBuffer[n * 4u + 1].color = currentSpriteData.color;
+    vertexBuffer[n * 4u + 2].color = currentSpriteData.color;
+    vertexBuffer[n * 4u + 3].color = currentSpriteData.color;
 }

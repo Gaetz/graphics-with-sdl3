@@ -9,19 +9,20 @@
 #include "Renderer.hpp"
 #include "Scene01Clear.hpp"
 #include "Scene02Triangle.hpp"
+#include "Scene03TriangleVertexBuffer.hpp"
 #include "Time.hpp"
 #include "Window.hpp"
 
 using namespace std;
 
 int main(int argc, char **argv) {
-    Window window;
-    Renderer renderer;
+    Window window {};
+    Renderer renderer {};
     Time time;
     window.Init();
     renderer.Init(window);
 
-    Scene *scene = new Scene02Triangle();
+    Scene *scene = new Scene03TriangleVertexBuffer();
     scene->Load(renderer);
 
     bool isRunning = true;

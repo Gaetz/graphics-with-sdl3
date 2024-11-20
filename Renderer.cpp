@@ -141,3 +141,46 @@ void Renderer::DrawGPUPrimitive(int numVertices, int numInstances, int firstVert
 	SDL_DrawGPUPrimitives(renderPass, numVertices, numInstances, firstVertex, firstInstance);
 }
 
+SDL_GPUGraphicsPipeline *Renderer::CreateGPUGraphicsPipeline(const SDL_GPUGraphicsPipelineCreateInfo &createInfo) const {
+    return SDL_CreateGPUGraphicsPipeline(device, &createInfo);
+}
+
+void Renderer::ReleaseShader(SDL_GPUShader *shader) const {
+    SDL_ReleaseGPUShader(device, shader);
+}
+
+SDL_GPUBuffer* Renderer::CreateGPUBuffer(const SDL_GPUBufferCreateInfo &createInfo) const {
+    return SDL_CreateGPUBuffer(device, &createInfo);
+}
+
+SDL_GPUTransferBuffer *Renderer::CreateGPUTransferBuffer(const SDL_GPUTransferBufferCreateInfo &createInfo) const {
+    return SDL_CreateGPUTransferBuffer(device, &createInfo);
+}
+
+void *Renderer::MapTransferBuffer(SDL_GPUTransferBuffer *transferBuffer, bool cycle) const {
+    return SDL_MapGPUTransferBuffer(device, transferBuffer, cycle);
+}
+
+void Renderer::UnmapTransferBuffer(SDL_GPUTransferBuffer *transferBuffer) const {
+    SDL_UnmapGPUTransferBuffer(device, transferBuffer);
+}
+
+void Renderer::ReleaseTransferBuffer(SDL_GPUTransferBuffer *transferBuffer) const {
+    SDL_ReleaseGPUTransferBuffer(device, transferBuffer);
+}
+
+void Renderer::TransferDataToGPUBuffer(SDL_GPUTransferBuffer *transferBuffer, SDL_GPUBuffer *buffer,
+                                       const SDL_GPUTransferBufferLocation &source,
+                                       const SDL_GPUBufferRegion &destination,
+                                       bool cycle) const {
+    SDL_GPUCommandBuffer* uploadCmdBuf = SDL_AcquireGPUCommandBuffer(device);
+    SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
+    SDL_UploadToGPUBuffer(copyPass, &source, &destination, cycle);
+    SDL_EndGPUCopyPass(copyPass);
+    SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
+}
+
+void Renderer::BindVertexBuffers(Uint32 firstSlot, const SDL_GPUBufferBinding &bindings, Uint32 numBindings) const {
+    SDL_BindGPUVertexBuffers(renderPass, firstSlot, &bindings, numBindings);
+}
+
