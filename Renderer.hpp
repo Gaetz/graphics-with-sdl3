@@ -38,17 +38,20 @@ public:
     SDL_GPUTransferBuffer* CreateGPUTransferBuffer(const SDL_GPUTransferBufferCreateInfo& createInfo) const;
     void* MapTransferBuffer(SDL_GPUTransferBuffer* transferBuffer, bool cycle) const;
     void UnmapTransferBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
-    void ReleaseTransferBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
 
-    void TransferDataToGPUBuffer(SDL_GPUTransferBuffer* transferBuffer, SDL_GPUBuffer* buffer,
-                                 const SDL_GPUTransferBufferLocation& source,
-                                 const SDL_GPUBufferRegion& destination, bool cycle) const;
+    void BeginUploadToGPUBuffer();
+    void UploadToGPUBuffer(const SDL_GPUTransferBufferLocation& source,
+                           const SDL_GPUBufferRegion& destination, bool cycle) const;
+    void EndUploadToGPUBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
 
     SDL_GPUDevice* device {nullptr};
     SDL_Window* renderWindow {nullptr};
     SDL_GPUCommandBuffer* cmdBuffer {nullptr};
     SDL_GPUTexture* swapchainTexture {nullptr};
     SDL_GPURenderPass* renderPass {nullptr};
+
+    SDL_GPUCommandBuffer* uploadCmdBuf {nullptr};
+    SDL_GPUCopyPass* copyPass {nullptr};
 };
 
 

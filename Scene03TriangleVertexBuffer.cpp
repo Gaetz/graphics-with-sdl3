@@ -90,8 +90,10 @@ void Scene03TriangleVertexBuffer::Load(Renderer& renderer) {
         .offset = 0,
         .size = sizeof(PositionColorVertex) * 3
     };
-    renderer.TransferDataToGPUBuffer(transferBuffer, vertexBuffer, transferBufferLocation, vertexBufferRegion, false);
-    renderer.ReleaseTransferBuffer(transferBuffer);
+
+    renderer.BeginUploadToGPUBuffer();
+    renderer.UploadToGPUBuffer(transferBufferLocation, vertexBufferRegion, false);
+    renderer.EndUploadToGPUBuffer(transferBuffer);
 }
 
 bool Scene03TriangleVertexBuffer::Update(float dt) {

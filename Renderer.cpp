@@ -165,22 +165,28 @@ void Renderer::UnmapTransferBuffer(SDL_GPUTransferBuffer *transferBuffer) const 
     SDL_UnmapGPUTransferBuffer(device, transferBuffer);
 }
 
-void Renderer::ReleaseTransferBuffer(SDL_GPUTransferBuffer *transferBuffer) const {
-    SDL_ReleaseGPUTransferBuffer(device, transferBuffer);
+void Renderer::BeginUploadToGPUBuffer() {
+    uploadCmdBuf = SDL_AcquireGPUCommandBuffer(device);
+    copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
 }
 
-void Renderer::TransferDataToGPUBuffer(SDL_GPUTransferBuffer *transferBuffer, SDL_GPUBuffer *buffer,
-                                       const SDL_GPUTransferBufferLocation &source,
-                                       const SDL_GPUBufferRegion &destination,
-                                       bool cycle) const {
-    SDL_GPUCommandBuffer* uploadCmdBuf = SDL_AcquireGPUCommandBuffer(device);
-    SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
+void Renderer::UploadToGPUBuffer(const SDL_GPUTransferBufferLocation &source,
+                                 const SDL_GPUBufferRegion &destination,
+                                 bool cycle) const {
     SDL_UploadToGPUBuffer(copyPass, &source, &destination, cycle);
+}
+
+void Renderer::EndUploadToGPUBuffer(SDL_GPUTransferBuffer *transferBuffer) const {
     SDL_EndGPUCopyPass(copyPass);
     SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
+    SDL_ReleaseGPUTransferBuffer(device, transferBuffer);
 }
 
 void Renderer::BindVertexBuffers(Uint32 firstSlot, const SDL_GPUBufferBinding &bindings, Uint32 numBindings) const {
     SDL_BindGPUVertexBuffers(renderPass, firstSlot, &bindings, numBindings);
 }
+
+
+
+
 
