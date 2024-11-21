@@ -20,7 +20,7 @@ public:
 
     virtual void Draw(Renderer& renderer) = 0;
 
-    virtual void Unload() = 0;
+    virtual void Unload(Renderer& renderer) = 0;
 
 protected:
     static bool ManageInput(InputState &inputState) {

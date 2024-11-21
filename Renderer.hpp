@@ -44,6 +44,9 @@ public:
                            const SDL_GPUBufferRegion& destination, bool cycle) const;
     void EndUploadToGPUBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
 
+    void ReleaseBuffer(SDL_GPUBuffer* buffer) const;
+    void ReleaseGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const;
+
     SDL_GPUDevice* device {nullptr};
     SDL_Window* renderWindow {nullptr};
     SDL_GPUCommandBuffer* cmdBuffer {nullptr};

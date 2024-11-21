@@ -182,11 +182,18 @@ void Renderer::EndUploadToGPUBuffer(SDL_GPUTransferBuffer *transferBuffer) const
     SDL_ReleaseGPUTransferBuffer(device, transferBuffer);
 }
 
+
 void Renderer::BindVertexBuffers(Uint32 firstSlot, const SDL_GPUBufferBinding &bindings, Uint32 numBindings) const {
     SDL_BindGPUVertexBuffers(renderPass, firstSlot, &bindings, numBindings);
 }
 
+void Renderer::ReleaseBuffer(SDL_GPUBuffer* buffer) const {
+	SDL_ReleaseGPUBuffer(device, buffer);
+}
 
+void Renderer::ReleaseGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const {
+	SDL_ReleaseGPUGraphicsPipeline(device, pipeline);
+}
 
 
 

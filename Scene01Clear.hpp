@@ -12,7 +12,7 @@ public:
     void Load(Renderer& renderer) override;
     bool Update(float dt) override;
     void Draw(Renderer& renderer) override;
-    void Unload() override;
+    void Unload(Renderer& renderer) override;
 
 private:
     InputState inputState;

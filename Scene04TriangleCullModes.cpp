@@ -163,6 +163,10 @@ void Scene04TriangleCullModes::Draw(Renderer& renderer) {
     renderer.End();
 }
 
-void Scene04TriangleCullModes::Unload() {
-
+void Scene04TriangleCullModes::Unload(Renderer& renderer) {
+    renderer.ReleaseBuffer(vertexBufferCW);
+    renderer.ReleaseBuffer(vertexBufferCCW);
+    for (int i = 0; i < pipelines.size(); ++i) {
+        renderer.ReleaseGraphicsPipeline(pipelines[i]);
+    }
 }

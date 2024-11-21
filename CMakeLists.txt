@@ -16,15 +16,6 @@ if (NOT SDL3_FOUND) # If there's none, fetch and build SDL3
                 URL https://github.com/libsdl-org/SDL/archive/refs/tags/preview-${SDL3_VERSION}.tar.gz
         )
         FetchContent_MakeAvailable(SDL3)
-
-        #FetchContent_GetProperties(SDL3)
-        #if (NOT SDL3_POPULATED) # Have we downloaded raylib yet?
-        #    set(FETCHCONTENT_QUIET NO)
-        #    FetchContent_Populate(SDL3)
-        #    message(STATUS "SDL3_SOURCE_DIR: ${SDL3_SOURCE_DIR}")
-        #    message(STATUS "SDL3_BINARY_DIR: ${SDL3_BINARY_DIR}")
-        #    add_subdirectory(${SDL3_SOURCE_DIR} ${SDL3_BINARY_DIR})
-        #endif()
     elseif (WIN32)
         FetchContent_Declare(
                 SDL3
@@ -34,12 +25,8 @@ if (NOT SDL3_FOUND) # If there's none, fetch and build SDL3
     endif()
 endif()
 
-# SDL3_image
-
 file( GLOB graphics-with-SDL3_SOURCES *.cpp )
-#add_library( ${PROJECT_NAME} ${graphics-with-SDL3_SOURCES} )
-#target_include_directories( ${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
 add_executable(${PROJECT_NAME} ${graphics-with-SDL3_SOURCES})
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${SDL3_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} SDL3::SDL3)

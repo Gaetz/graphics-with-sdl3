@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
         time.DelayTime();
     }
 
-    scene->Unload();
+    scene->Unload(renderer);
 
     renderer.Close();
     window.Close();

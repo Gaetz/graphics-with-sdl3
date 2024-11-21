@@ -21,6 +21,6 @@ void Scene01Clear::Draw(Renderer& renderer) {
     renderer.End();
 }
 
-void Scene01Clear::Unload() {
+void Scene01Clear::Unload(Renderer& renderer) {
 
 }

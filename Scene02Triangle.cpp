@@ -81,6 +81,8 @@ void Scene02Triangle::Draw(Renderer& renderer) {
     renderer.End();
 }
 
-void Scene02Triangle::Unload() {
+void Scene02Triangle::Unload(Renderer& renderer) {
+    renderer.ReleaseGraphicsPipeline(fillPipeline);
+    renderer.ReleaseGraphicsPipeline(linePipeline);
 
 }

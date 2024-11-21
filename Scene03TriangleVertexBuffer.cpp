@@ -112,6 +112,7 @@ void Scene03TriangleVertexBuffer::Draw(Renderer& renderer) {
     renderer.End();
 }
 
-void Scene03TriangleVertexBuffer::Unload() {
-
+void Scene03TriangleVertexBuffer::Unload(Renderer& renderer) {
+    renderer.ReleaseBuffer(vertexBuffer);
+    renderer.ReleaseGraphicsPipeline(pipeline);
 }
