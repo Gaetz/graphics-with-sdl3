@@ -17,15 +17,15 @@ void Scene03TriangleVertexBuffer::Load(Renderer& renderer) {
         .vertex_shader = vertexShader,
         .fragment_shader = fragmentShader,
         // This is set up to match the vertex shader layout!
-        .vertex_input_state = (SDL_GPUVertexInputState){
-            .vertex_buffer_descriptions = (SDL_GPUVertexBufferDescription[]){{
+        .vertex_input_state = SDL_GPUVertexInputState {
+            .vertex_buffer_descriptions = new SDL_GPUVertexBufferDescription[1] {{
                 .slot = 0,
                 .pitch = sizeof(PositionColorVertex),
                 .input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX,
                 .instance_step_rate = 0,
             }},
             .num_vertex_buffers = 1,
-            .vertex_attributes = (SDL_GPUVertexAttribute[]){{
+            .vertex_attributes = new SDL_GPUVertexAttribute[2] {{
                 .location = 0,
                 .buffer_slot = 0,
                 .format = SDL_GPU_VERTEXELEMENTFORMAT_FLOAT3,
@@ -75,9 +75,9 @@ void Scene03TriangleVertexBuffer::Load(Renderer& renderer) {
     auto* transferData = static_cast<PositionColorVertex *>(
         renderer.MapTransferBuffer(transferBuffer, false)
     );
-    transferData[0] = (PositionColorVertex) {  -0.5,  -0.5, 0, 255,   0,   0, 255 };
-    transferData[1] = (PositionColorVertex) {   0.5,  -0.5, 0,   0, 255,   0, 255 };
-    transferData[2] = (PositionColorVertex) {     0,   0.5, 0,   0,   0, 255, 255 };
+    transferData[0] = PositionColorVertex {  -0.5,  -0.5, 0, 255,   0,   0, 255 };
+    transferData[1] = PositionColorVertex {   0.5,  -0.5, 0,   0, 255,   0, 255 };
+    transferData[2] = PositionColorVertex {     0,   0.5, 0,   0,   0, 255, 255 };
     renderer.UnmapTransferBuffer(transferBuffer);
 
     // Upload the transfer data to the vertex buffer
