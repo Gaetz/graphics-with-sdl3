@@ -17,8 +17,7 @@ void Renderer::Init(Window &window) {
 
 void Renderer::Begin() {
     cmdBuffer = SDL_AcquireGPUCommandBuffer(device);
-    if (cmdBuffer == nullptr)
-    {
+    if (cmdBuffer == nullptr) {
         SDL_Log("AcquireGPUCommandBuffer failed: %s", SDL_GetError());
     }
 
@@ -27,8 +26,7 @@ void Renderer::Begin() {
         SDL_Log("AcquireGPUSwapchainTexture failed: %s", SDL_GetError());
     }
 
-    if (swapchainTexture != nullptr)
-    {
+    if (swapchainTexture != nullptr) {
         SDL_GPUColorTargetInfo colorTargetInfo = { 0 };
         colorTargetInfo.texture = swapchainTexture;
         colorTargetInfo.clear_color = SDL_FColor { 0.3f, 0.4f, 0.5f, 1.0f };
@@ -59,16 +57,13 @@ SDL_GPUShader* Renderer::LoadShader(
 ) {
 	// Auto-detect the shader stage from the file name for convenience
 	SDL_GPUShaderStage stage;
-	if (SDL_strstr(shaderFilename, ".vert"))
-	{
+	if (SDL_strstr(shaderFilename, ".vert")) {
 		stage = SDL_GPU_SHADERSTAGE_VERTEX;
 	}
-	else if (SDL_strstr(shaderFilename, ".frag"))
-	{
+	else if (SDL_strstr(shaderFilename, ".frag")) {
 		stage = SDL_GPU_SHADERSTAGE_FRAGMENT;
 	}
-	else
-	{
+	else {
 		SDL_Log("Invalid shader stage!");
 		return nullptr;
 	}
@@ -97,8 +92,7 @@ SDL_GPUShader* Renderer::LoadShader(
 
 	size_t codeSize;
 	void* code = SDL_LoadFile(fullPath, &codeSize);
-	if (code == nullptr)
-	{
+	if (code == nullptr) {
 		SDL_Log("Failed to load shader from disk! %s", fullPath);
 		return nullptr;
 	}
@@ -115,8 +109,7 @@ SDL_GPUShader* Renderer::LoadShader(
 		.num_uniform_buffers = uniformBufferCount
 	};
 	SDL_GPUShader* shader = SDL_CreateGPUShader(device, &shaderInfo);
-	if (shader == nullptr)
-	{
+	if (shader == nullptr) {
 		SDL_Log("Failed to create shader!");
 		SDL_free(code);
 		return nullptr;
@@ -135,6 +128,11 @@ void Renderer::SetGPUViewport(const SDL_GPUViewport& viewport) const {
 }
 void Renderer::SetGPUScissorRect(const SDL_Rect& rect) const {
 	SDL_SetGPUScissor(renderPass, &rect);
+}
+
+bool Renderer::DoesTextureSupportFormat(SDL_GPUTextureFormat format, SDL_GPUTextureType type,
+	SDL_GPUTextureUsageFlags usageFlags) const {
+	return SDL_GPUTextureSupportsFormat(device, format,	type, usageFlags);
 }
 
 void Renderer::DrawGPUPrimitive(int numVertices, int numInstances, int firstVertex, int firstInstance) const {

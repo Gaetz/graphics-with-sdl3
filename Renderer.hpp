@@ -30,9 +30,11 @@ public:
     SDL_GPUGraphicsPipeline* CreateGPUGraphicsPipeline(const SDL_GPUGraphicsPipelineCreateInfo& createInfo) const;
     void BindGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const;
     void BindVertexBuffers(Uint32 firstSlot, const SDL_GPUBufferBinding& bindings, Uint32 numBindings) const;
+    void DrawGPUPrimitive(int numVertices, int numInstances, int firstVertex, int firstInstance) const;
+
     void SetGPUViewport(const SDL_GPUViewport& viewport) const;
     void SetGPUScissorRect(const SDL_Rect& rect) const;
-    void DrawGPUPrimitive(int, int, int, int) const;
+    bool DoesTextureSupportFormat(SDL_GPUTextureFormat format, SDL_GPUTextureType type, SDL_GPUTextureUsageFlags usageFlags) const;
 
     SDL_GPUBuffer* CreateGPUBuffer(const SDL_GPUBufferCreateInfo& createInfo) const;
     SDL_GPUTransferBuffer* CreateGPUTransferBuffer(const SDL_GPUTransferBufferCreateInfo& createInfo) const;
