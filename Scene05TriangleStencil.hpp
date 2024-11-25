@@ -22,8 +22,8 @@ private:
     SDL_GPUShader* fragmentShader;
     SDL_GPUGraphicsPipeline* maskeePipeline;
     SDL_GPUGraphicsPipeline* maskerPipeline;
-    static SDL_GPUBuffer* vertexBuffer;
-    static SDL_GPUTexture* depthStencilTexture;
+    SDL_GPUBuffer* vertexBuffer;
+    SDL_GPUTexture* depthStencilTexture;
 };
 
 

@@ -6,6 +6,7 @@
 #include "Window.hpp"
 #include <SDL3/SDL_log.h>
 
+
 void Renderer::Init(Window &window) {
     renderWindow = window.sdlWindow;
     device = SDL_CreateGPUDevice(
@@ -15,7 +16,7 @@ void Renderer::Init(Window &window) {
     SDL_ClaimWindowForGPUDevice(device, renderWindow);
 }
 
-void Renderer::Begin() {
+void Renderer::Begin(SDL_GPUDepthStencilTargetInfo* depthStencilTargetInfo) {
     cmdBuffer = SDL_AcquireGPUCommandBuffer(device);
     if (cmdBuffer == nullptr) {
         SDL_Log("AcquireGPUCommandBuffer failed: %s", SDL_GetError());
@@ -27,13 +28,13 @@ void Renderer::Begin() {
     }
 
     if (swapchainTexture != nullptr) {
-        SDL_GPUColorTargetInfo colorTargetInfo = { 0 };
+        SDL_GPUColorTargetInfo colorTargetInfo = {};
         colorTargetInfo.texture = swapchainTexture;
-        colorTargetInfo.clear_color = SDL_FColor { 0.3f, 0.4f, 0.5f, 1.0f };
+        colorTargetInfo.clear_color = SDL_FColor { 0.0f, 0.0f, 0.0f, 1.0f };
         colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
         colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
 
-        renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTargetInfo, 1, nullptr);
+        renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTargetInfo, 1, depthStencilTargetInfo);
     }
 }
 
@@ -130,8 +131,12 @@ void Renderer::SetGPUScissorRect(const SDL_Rect& rect) const {
 	SDL_SetGPUScissor(renderPass, &rect);
 }
 
+void Renderer::SetGPUStencilReference(Uint8 stencilReference) const {
+	SDL_SetGPUStencilReference(renderPass, stencilReference);
+}
+
 bool Renderer::DoesTextureSupportFormat(SDL_GPUTextureFormat format, SDL_GPUTextureType type,
-	SDL_GPUTextureUsageFlags usageFlags) const {
+                                        SDL_GPUTextureUsageFlags usageFlags) const {
 	return SDL_GPUTextureSupportsFormat(device, format,	type, usageFlags);
 }
 
@@ -161,6 +166,10 @@ void *Renderer::MapTransferBuffer(SDL_GPUTransferBuffer *transferBuffer, bool cy
 
 void Renderer::UnmapTransferBuffer(SDL_GPUTransferBuffer *transferBuffer) const {
     SDL_UnmapGPUTransferBuffer(device, transferBuffer);
+}
+
+SDL_GPUTexture* Renderer::CreateTexture(const SDL_GPUTextureCreateInfo& createInfo) const {
+	return SDL_CreateGPUTexture(device, &createInfo);
 }
 
 void Renderer::BeginUploadToGPUBuffer() {

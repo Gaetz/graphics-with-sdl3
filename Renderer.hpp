@@ -6,13 +6,16 @@
 #define RENDERER_HPP
 
 #include <SDL3/SDL_gpu.h>
+#include <vector>
+
+using std::vector;
 
 class Window;
 
 class Renderer {
 public:
     void Init(Window &window);
-    void Begin();
+    void Begin(SDL_GPUDepthStencilTargetInfo* depthStencilTargetInfo = nullptr);
     void End() const;
     void Close() const;
 
@@ -34,12 +37,16 @@ public:
 
     void SetGPUViewport(const SDL_GPUViewport& viewport) const;
     void SetGPUScissorRect(const SDL_Rect& rect) const;
+    void SetGPUStencilReference(Uint8 stencilReference) const;
     bool DoesTextureSupportFormat(SDL_GPUTextureFormat format, SDL_GPUTextureType type, SDL_GPUTextureUsageFlags usageFlags) const;
+
 
     SDL_GPUBuffer* CreateGPUBuffer(const SDL_GPUBufferCreateInfo& createInfo) const;
     SDL_GPUTransferBuffer* CreateGPUTransferBuffer(const SDL_GPUTransferBufferCreateInfo& createInfo) const;
     void* MapTransferBuffer(SDL_GPUTransferBuffer* transferBuffer, bool cycle) const;
     void UnmapTransferBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
+
+    SDL_GPUTexture* CreateTexture(const SDL_GPUTextureCreateInfo& createInfo) const;
 
     void BeginUploadToGPUBuffer();
     void UploadToGPUBuffer(const SDL_GPUTransferBufferLocation& source,
