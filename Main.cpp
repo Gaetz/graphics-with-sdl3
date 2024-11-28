@@ -11,6 +11,7 @@
 #include "Scene03TriangleVertexBuffer.hpp"
 #include "Scene04TriangleCullModes.hpp"
 #include "Scene05TriangleStencil.hpp"
+#include "Scene06TriangleInstances.hpp"
 #include "Time.hpp"
 #include "Window.hpp"
 
@@ -23,7 +24,7 @@ int main(int argc, char **argv) {
     window.Init();
     renderer.Init(window);
 
-    auto scene = std::make_unique<Scene05TriangleStencil>();
+    auto scene = std::make_unique<Scene06TriangleInstances>();
     scene->Load(renderer);
 
     bool isRunning { true };
@@ -32,6 +33,8 @@ int main(int argc, char **argv) {
 
         isRunning = scene->Update(dt);
         scene->Draw(renderer);
+
+
 
         time.DelayTime();
     }

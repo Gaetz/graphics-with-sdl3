@@ -76,7 +76,7 @@ void Scene02Triangle::Draw(Renderer& renderer) {
     if (useScissorRect) {
         renderer.SetGPUScissorRect(scissorRect);
     }
-    renderer.DrawGPUPrimitive(3, 1, 0, 0);
+    renderer.DrawPrimitives(3, 1, 0, 0);
 
     renderer.End();
 }

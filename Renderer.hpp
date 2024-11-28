@@ -33,7 +33,9 @@ public:
     SDL_GPUGraphicsPipeline* CreateGPUGraphicsPipeline(const SDL_GPUGraphicsPipelineCreateInfo& createInfo) const;
     void BindGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const;
     void BindVertexBuffers(Uint32 firstSlot, const SDL_GPUBufferBinding& bindings, Uint32 numBindings) const;
-    void DrawGPUPrimitive(int numVertices, int numInstances, int firstVertex, int firstInstance) const;
+    void BindIndexBuffer(const SDL_GPUBufferBinding& bindings, SDL_GPUIndexElementSize indexElementSize) const;
+    void DrawPrimitives(int numVertices, int numInstances, int firstVertex, int firstInstance) const;
+    void DrawIndexedPrimitives(int numIndices, int numInstances, int firstIndex, int vertexOffset, int firstInstance) const;
 
     void SetGPUViewport(const SDL_GPUViewport& viewport) const;
     void SetGPUScissorRect(const SDL_Rect& rect) const;

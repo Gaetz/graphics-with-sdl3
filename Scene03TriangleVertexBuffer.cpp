@@ -107,7 +107,7 @@ void Scene03TriangleVertexBuffer::Draw(Renderer& renderer) {
     renderer.BindGraphicsPipeline(pipeline);
     SDL_GPUBufferBinding vertexBindings = { .buffer = vertexBuffer, .offset = 0 };
     renderer.BindVertexBuffers(0, vertexBindings, 1);
-    renderer.DrawGPUPrimitive(3, 1, 0, 0);
+    renderer.DrawPrimitives(3, 1, 0, 0);
 
     renderer.End();
 }

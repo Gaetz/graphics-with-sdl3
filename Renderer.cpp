@@ -140,8 +140,13 @@ bool Renderer::DoesTextureSupportFormat(SDL_GPUTextureFormat format, SDL_GPUText
 	return SDL_GPUTextureSupportsFormat(device, format,	type, usageFlags);
 }
 
-void Renderer::DrawGPUPrimitive(int numVertices, int numInstances, int firstVertex, int firstInstance) const {
+void Renderer::DrawPrimitives(int numVertices, int numInstances, int firstVertex, int firstInstance) const {
 	SDL_DrawGPUPrimitives(renderPass, numVertices, numInstances, firstVertex, firstInstance);
+}
+
+void Renderer::DrawIndexedPrimitives(int numIndices, int numInstances, int firstIndex,
+	int vertexOffset, int firstInstance) const {
+	SDL_DrawGPUIndexedPrimitives(renderPass, numIndices, numInstances, firstIndex, vertexOffset, firstInstance);
 }
 
 SDL_GPUGraphicsPipeline *Renderer::CreateGPUGraphicsPipeline(const SDL_GPUGraphicsPipelineCreateInfo &createInfo) const {
@@ -192,6 +197,10 @@ void Renderer::EndUploadToGPUBuffer(SDL_GPUTransferBuffer *transferBuffer) const
 
 void Renderer::BindVertexBuffers(Uint32 firstSlot, const SDL_GPUBufferBinding &bindings, Uint32 numBindings) const {
     SDL_BindGPUVertexBuffers(renderPass, firstSlot, &bindings, numBindings);
+}
+
+void Renderer::BindIndexBuffer(const SDL_GPUBufferBinding& bindings, SDL_GPUIndexElementSize indexElementSize) const {
+	SDL_BindGPUIndexBuffer(renderPass, &bindings, indexElementSize);
 }
 
 void Renderer::ReleaseBuffer(SDL_GPUBuffer* buffer) const {

@@ -153,12 +153,12 @@ void Scene04TriangleCullModes::Draw(Renderer& renderer) {
     renderer.SetGPUViewport({ 0, 0, 320, 480 });
     SDL_GPUBufferBinding vertexBindingsCW = { .buffer = vertexBufferCW, .offset = 0 };
     renderer.BindVertexBuffers(0, vertexBindingsCW, 1);
-    renderer.DrawGPUPrimitive(3, 1, 0, 0);
+    renderer.DrawPrimitives(3, 1, 0, 0);
 
     renderer.SetGPUViewport({ 320, 0, 320, 480 });
     SDL_GPUBufferBinding vertexBindingsCCW = { .buffer = vertexBufferCCW, .offset = 0 };
     renderer.BindVertexBuffers(0, vertexBindingsCCW, 1);
-    renderer.DrawGPUPrimitive(3, 1, 0, 0);
+    renderer.DrawPrimitives(3, 1, 0, 0);
 
     renderer.End();
 }
