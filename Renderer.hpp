@@ -7,8 +7,10 @@
 
 #include <SDL3/SDL_gpu.h>
 #include <vector>
+#include <string>
 
 using std::vector;
+using std::string;
 
 class Window;
 
@@ -29,6 +31,13 @@ public:
     );
     void ReleaseShader(SDL_GPUShader* shader) const;
 
+    SDL_Surface* LoadBMPImage(const char* basePath, const char* imageFilename, int desiredChannels);
+    SDL_GPUSampler* CreateSampler(const SDL_GPUSamplerCreateInfo& createInfo) const;
+    void ReleaseSurface(SDL_Surface* surface) const;
+    SDL_GPUTexture* CreateTexture(const SDL_GPUTextureCreateInfo& createInfo) const;
+    void SetTextureName(SDL_GPUTexture* texture, const string& name) const;
+    void ReleaseTexture(SDL_GPUTexture* texture) const;
+
 
     SDL_GPUGraphicsPipeline* CreateGPUGraphicsPipeline(const SDL_GPUGraphicsPipelineCreateInfo& createInfo) const;
     void BindGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const;
@@ -37,23 +46,22 @@ public:
     void DrawPrimitives(int numVertices, int numInstances, int firstVertex, int firstInstance) const;
     void DrawIndexedPrimitives(int numIndices, int numInstances, int firstIndex, int vertexOffset, int firstInstance) const;
 
-    void SetGPUViewport(const SDL_GPUViewport& viewport) const;
-    void SetGPUScissorRect(const SDL_Rect& rect) const;
-    void SetGPUStencilReference(Uint8 stencilReference) const;
+    void SetViewport(const SDL_GPUViewport& viewport) const;
+    void SetScissorRect(const SDL_Rect& rect) const;
+    void SetStencilReference(Uint8 stencilReference) const;
     bool DoesTextureSupportFormat(SDL_GPUTextureFormat format, SDL_GPUTextureType type, SDL_GPUTextureUsageFlags usageFlags) const;
 
 
-    SDL_GPUBuffer* CreateGPUBuffer(const SDL_GPUBufferCreateInfo& createInfo) const;
-    SDL_GPUTransferBuffer* CreateGPUTransferBuffer(const SDL_GPUTransferBufferCreateInfo& createInfo) const;
+    SDL_GPUBuffer* CreateBuffer(const SDL_GPUBufferCreateInfo& createInfo) const;
+    void SetBufferName(SDL_GPUBuffer* buffer, const string& name) const;
+    SDL_GPUTransferBuffer* CreateTransferBuffer(const SDL_GPUTransferBufferCreateInfo& createInfo) const;
     void* MapTransferBuffer(SDL_GPUTransferBuffer* transferBuffer, bool cycle) const;
     void UnmapTransferBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
 
-    SDL_GPUTexture* CreateTexture(const SDL_GPUTextureCreateInfo& createInfo) const;
-
-    void BeginUploadToGPUBuffer();
-    void UploadToGPUBuffer(const SDL_GPUTransferBufferLocation& source,
+    void BeginUploadToBuffer();
+    void UploadToBuffer(const SDL_GPUTransferBufferLocation& source,
                            const SDL_GPUBufferRegion& destination, bool cycle) const;
-    void EndUploadToGPUBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
+    void EndUploadToBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
 
     void ReleaseBuffer(SDL_GPUBuffer* buffer) const;
     void ReleaseGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const;

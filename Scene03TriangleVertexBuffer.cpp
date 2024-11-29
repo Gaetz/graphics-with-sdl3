@@ -62,14 +62,14 @@ void Scene03TriangleVertexBuffer::Load(Renderer& renderer) {
         .usage = SDL_GPU_BUFFERUSAGE_VERTEX,
         .size = sizeof(PositionColorVertex) * 3
     };
-    vertexBuffer = renderer.CreateGPUBuffer(vertexBufferCreateInfo);
+    vertexBuffer = renderer.CreateBuffer(vertexBufferCreateInfo);
 
     // To get data into the vertex buffer, we have to use a transfer buffer
     SDL_GPUTransferBufferCreateInfo transferBufferCreateInfo = {
         .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
         .size = sizeof(PositionColorVertex) * 3
     };
-    SDL_GPUTransferBuffer* transferBuffer = renderer.CreateGPUTransferBuffer(transferBufferCreateInfo);
+    SDL_GPUTransferBuffer* transferBuffer = renderer.CreateTransferBuffer(transferBufferCreateInfo);
 
     // Map the transfer buffer and fill it with data (data is bound to the transfer buffer)
     auto* transferData = static_cast<PositionColorVertex *>(
@@ -91,9 +91,9 @@ void Scene03TriangleVertexBuffer::Load(Renderer& renderer) {
         .size = sizeof(PositionColorVertex) * 3
     };
 
-    renderer.BeginUploadToGPUBuffer();
-    renderer.UploadToGPUBuffer(transferBufferLocation, vertexBufferRegion, false);
-    renderer.EndUploadToGPUBuffer(transferBuffer);
+    renderer.BeginUploadToBuffer();
+    renderer.UploadToBuffer(transferBufferLocation, vertexBufferRegion, false);
+    renderer.EndUploadToBuffer(transferBuffer);
 }
 
 bool Scene03TriangleVertexBuffer::Update(float dt) {

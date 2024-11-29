@@ -71,10 +71,10 @@ void Scene02Triangle::Draw(Renderer& renderer) {
 
     renderer.BindGraphicsPipeline(useWireframeMode ? linePipeline : fillPipeline);
     if (useSmallViewport) {
-        renderer.SetGPUViewport(smallViewport);
+        renderer.SetViewport(smallViewport);
     }
     if (useScissorRect) {
-        renderer.SetGPUScissorRect(scissorRect);
+        renderer.SetScissorRect(scissorRect);
     }
     renderer.DrawPrimitives(3, 1, 0, 0);
 

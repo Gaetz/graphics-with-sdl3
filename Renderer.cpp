@@ -3,6 +3,9 @@
 //
 
 #include "Renderer.hpp"
+
+#include <SDL3/SDL_assert.h>
+
 #include "Window.hpp"
 #include <SDL3/SDL_log.h>
 
@@ -124,14 +127,14 @@ void Renderer::BindGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const {
 	SDL_BindGPUGraphicsPipeline(renderPass, pipeline);
 }
 
-void Renderer::SetGPUViewport(const SDL_GPUViewport& viewport) const {
+void Renderer::SetViewport(const SDL_GPUViewport& viewport) const {
 	SDL_SetGPUViewport(renderPass, &viewport);
 }
-void Renderer::SetGPUScissorRect(const SDL_Rect& rect) const {
+void Renderer::SetScissorRect(const SDL_Rect& rect) const {
 	SDL_SetGPUScissor(renderPass, &rect);
 }
 
-void Renderer::SetGPUStencilReference(Uint8 stencilReference) const {
+void Renderer::SetStencilReference(Uint8 stencilReference) const {
 	SDL_SetGPUStencilReference(renderPass, stencilReference);
 }
 
@@ -157,11 +160,52 @@ void Renderer::ReleaseShader(SDL_GPUShader *shader) const {
     SDL_ReleaseGPUShader(device, shader);
 }
 
-SDL_GPUBuffer* Renderer::CreateGPUBuffer(const SDL_GPUBufferCreateInfo &createInfo) const {
+SDL_Surface* Renderer::LoadBMPImage(const char* basePath, const char* imageFilename, int desiredChannels) {
+	char fullPath[256];
+	SDL_PixelFormat format;
+	SDL_snprintf(fullPath, sizeof(fullPath), "%sContent/Images/%s", basePath, imageFilename);
+
+	SDL_Surface* result = SDL_LoadBMP(fullPath);
+	if (result == nullptr) {
+		SDL_Log("Failed to load BMP: %s", SDL_GetError());
+		return nullptr;
+	}
+
+	if (desiredChannels == 4) {
+		format = SDL_PIXELFORMAT_ABGR8888;
+	}
+	else {
+		SDL_assert(!"Unexpected desiredChannels");
+		SDL_DestroySurface(result);
+		return nullptr;
+	}
+
+	if (result->format != format) {
+		SDL_Surface *next = SDL_ConvertSurface(result, format);
+		SDL_DestroySurface(result);
+		result = next;
+	}
+
+	return result;
+}
+
+SDL_GPUSampler* Renderer::CreateSampler(const SDL_GPUSamplerCreateInfo& createInfo) const {
+	return SDL_CreateGPUSampler(device, &createInfo);
+}
+
+void Renderer::ReleaseSurface(SDL_Surface* surface) const {
+	SDL_DestroySurface(surface);
+}
+
+SDL_GPUBuffer* Renderer::CreateBuffer(const SDL_GPUBufferCreateInfo &createInfo) const {
     return SDL_CreateGPUBuffer(device, &createInfo);
 }
 
-SDL_GPUTransferBuffer *Renderer::CreateGPUTransferBuffer(const SDL_GPUTransferBufferCreateInfo &createInfo) const {
+void Renderer::SetBufferName(SDL_GPUBuffer* buffer, const string& name) const {
+	SDL_SetGPUBufferName(device, buffer, name.c_str());
+}
+
+SDL_GPUTransferBuffer *Renderer::CreateTransferBuffer(const SDL_GPUTransferBufferCreateInfo &createInfo) const {
     return SDL_CreateGPUTransferBuffer(device, &createInfo);
 }
 
@@ -177,18 +221,26 @@ SDL_GPUTexture* Renderer::CreateTexture(const SDL_GPUTextureCreateInfo& createIn
 	return SDL_CreateGPUTexture(device, &createInfo);
 }
 
-void Renderer::BeginUploadToGPUBuffer() {
+void Renderer::SetTextureName(SDL_GPUTexture* texture, const string& name) const {
+	SDL_SetGPUTextureName(device, texture, name.c_str());
+}
+
+void Renderer::ReleaseTexture(SDL_GPUTexture* texture) const {
+	SDL_ReleaseGPUTexture(device, texture);
+}
+
+void Renderer::BeginUploadToBuffer() {
     uploadCmdBuf = SDL_AcquireGPUCommandBuffer(device);
     copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);
 }
 
-void Renderer::UploadToGPUBuffer(const SDL_GPUTransferBufferLocation &source,
+void Renderer::UploadToBuffer(const SDL_GPUTransferBufferLocation &source,
                                  const SDL_GPUBufferRegion &destination,
                                  bool cycle) const {
     SDL_UploadToGPUBuffer(copyPass, &source, &destination, cycle);
 }
 
-void Renderer::EndUploadToGPUBuffer(SDL_GPUTransferBuffer *transferBuffer) const {
+void Renderer::EndUploadToBuffer(SDL_GPUTransferBuffer *transferBuffer) const {
     SDL_EndGPUCopyPass(copyPass);
     SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
     SDL_ReleaseGPUTransferBuffer(device, transferBuffer);

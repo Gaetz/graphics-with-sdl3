@@ -71,15 +71,15 @@ void Scene04TriangleCullModes::Load(Renderer& renderer) {
         .usage = SDL_GPU_BUFFERUSAGE_VERTEX,
         .size = sizeof(PositionColorVertex) * 3
     };
-    vertexBufferCW = renderer.CreateGPUBuffer(vertexBufferCreateInfo);
-    vertexBufferCCW = renderer.CreateGPUBuffer(vertexBufferCreateInfo);
+    vertexBufferCW = renderer.CreateBuffer(vertexBufferCreateInfo);
+    vertexBufferCCW = renderer.CreateBuffer(vertexBufferCreateInfo);
 
     // To get data into the vertex buffer, we have to use a transfer buffer
     SDL_GPUTransferBufferCreateInfo transferBufferCreateInfo = {
         .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
         .size = sizeof(PositionColorVertex) * 6,
     };
-    SDL_GPUTransferBuffer* transferBuffer = renderer.CreateGPUTransferBuffer(transferBufferCreateInfo);
+    SDL_GPUTransferBuffer* transferBuffer = renderer.CreateTransferBuffer(transferBufferCreateInfo);
 
     // Map the transfer buffer and fill it with data (data is bound to the transfer buffer)
     auto* transferData = static_cast<PositionColorVertex *>(
@@ -113,10 +113,10 @@ void Scene04TriangleCullModes::Load(Renderer& renderer) {
             .size = sizeof(PositionColorVertex) * 3
     };
 
-    renderer.BeginUploadToGPUBuffer();
-    renderer.UploadToGPUBuffer(transferBufferLocationCW, vertexBufferRegionCW, false);
-    renderer.UploadToGPUBuffer(transferBufferLocationCCW, vertexBufferRegionCCW, false);
-    renderer.EndUploadToGPUBuffer(transferBuffer);
+    renderer.BeginUploadToBuffer();
+    renderer.UploadToBuffer(transferBufferLocationCW, vertexBufferRegionCW, false);
+    renderer.UploadToBuffer(transferBufferLocationCCW, vertexBufferRegionCCW, false);
+    renderer.EndUploadToBuffer(transferBuffer);
 
     // Finally, print instructions!
     SDL_Log("Press Left/Right to switch between modes");
@@ -150,12 +150,12 @@ void Scene04TriangleCullModes::Draw(Renderer& renderer) {
 
     renderer.BindGraphicsPipeline(pipelines[currentMode]);
 
-    renderer.SetGPUViewport({ 0, 0, 320, 480 });
+    renderer.SetViewport({ 0, 0, 320, 480 });
     SDL_GPUBufferBinding vertexBindingsCW = { .buffer = vertexBufferCW, .offset = 0 };
     renderer.BindVertexBuffers(0, vertexBindingsCW, 1);
     renderer.DrawPrimitives(3, 1, 0, 0);
 
-    renderer.SetGPUViewport({ 320, 0, 320, 480 });
+    renderer.SetViewport({ 320, 0, 320, 480 });
     SDL_GPUBufferBinding vertexBindingsCCW = { .buffer = vertexBufferCCW, .offset = 0 };
     renderer.BindVertexBuffers(0, vertexBindingsCCW, 1);
     renderer.DrawPrimitives(3, 1, 0, 0);
