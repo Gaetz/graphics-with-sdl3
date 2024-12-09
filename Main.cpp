@@ -12,6 +12,7 @@
 #include "Scene04TriangleCullModes.hpp"
 #include "Scene05TriangleStencil.hpp"
 #include "Scene06TriangleInstances.hpp"
+#include "Scene07TextureQuad.hpp"
 #include "Time.hpp"
 #include "Window.hpp"
 
@@ -24,7 +25,7 @@ int main(int argc, char **argv) {
     window.Init();
     renderer.Init(window);
 
-    auto scene = std::make_unique<Scene06TriangleInstances>();
+    auto scene = std::make_unique<Scene07TextureQuad>();
     scene->Load(renderer);
 
     bool isRunning { true };

@@ -43,6 +43,8 @@ public:
     void BindGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const;
     void BindVertexBuffers(Uint32 firstSlot, const SDL_GPUBufferBinding& bindings, Uint32 numBindings) const;
     void BindIndexBuffer(const SDL_GPUBufferBinding& bindings, SDL_GPUIndexElementSize indexElementSize) const;
+    void BindFragmentSamplers(Uint32 firstSlot, const SDL_GPUTextureSamplerBinding& bindings, Uint32 numBindings) const;
+
     void DrawPrimitives(int numVertices, int numInstances, int firstVertex, int firstInstance) const;
     void DrawIndexedPrimitives(int numIndices, int numInstances, int firstIndex, int vertexOffset, int firstInstance) const;
 
@@ -57,10 +59,13 @@ public:
     SDL_GPUTransferBuffer* CreateTransferBuffer(const SDL_GPUTransferBufferCreateInfo& createInfo) const;
     void* MapTransferBuffer(SDL_GPUTransferBuffer* transferBuffer, bool cycle) const;
     void UnmapTransferBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
+    void ReleaseTransferBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
 
     void BeginUploadToBuffer();
     void UploadToBuffer(const SDL_GPUTransferBufferLocation& source,
                            const SDL_GPUBufferRegion& destination, bool cycle) const;
+    void UploadToTexture(const SDL_GPUTextureTransferInfo& source,
+                           const SDL_GPUTextureRegion& destination, bool cycle) const;
     void EndUploadToBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
 
     void ReleaseBuffer(SDL_GPUBuffer* buffer) const;

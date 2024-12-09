@@ -217,6 +217,10 @@ void Renderer::UnmapTransferBuffer(SDL_GPUTransferBuffer *transferBuffer) const 
     SDL_UnmapGPUTransferBuffer(device, transferBuffer);
 }
 
+void Renderer::ReleaseTransferBuffer(SDL_GPUTransferBuffer* transferBuffer) const {
+	SDL_ReleaseGPUTransferBuffer(device, transferBuffer);
+}
+
 SDL_GPUTexture* Renderer::CreateTexture(const SDL_GPUTextureCreateInfo& createInfo) const {
 	return SDL_CreateGPUTexture(device, &createInfo);
 }
@@ -240,6 +244,11 @@ void Renderer::UploadToBuffer(const SDL_GPUTransferBufferLocation &source,
     SDL_UploadToGPUBuffer(copyPass, &source, &destination, cycle);
 }
 
+void Renderer::UploadToTexture(const SDL_GPUTextureTransferInfo& source, const SDL_GPUTextureRegion& destination,
+	bool cycle) const {
+	SDL_UploadToGPUTexture(copyPass, &source, &destination, cycle);
+}
+
 void Renderer::EndUploadToBuffer(SDL_GPUTransferBuffer *transferBuffer) const {
     SDL_EndGPUCopyPass(copyPass);
     SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
@@ -253,6 +262,11 @@ void Renderer::BindVertexBuffers(Uint32 firstSlot, const SDL_GPUBufferBinding &b
 
 void Renderer::BindIndexBuffer(const SDL_GPUBufferBinding& bindings, SDL_GPUIndexElementSize indexElementSize) const {
 	SDL_BindGPUIndexBuffer(renderPass, &bindings, indexElementSize);
+}
+
+void Renderer::BindFragmentSamplers(Uint32 firstSlot, const SDL_GPUTextureSamplerBinding& bindings,
+	Uint32 numBindings) const {
+	SDL_BindGPUFragmentSamplers(renderPass, firstSlot, &bindings, numBindings);
 }
 
 void Renderer::ReleaseBuffer(SDL_GPUBuffer* buffer) const {

@@ -27,7 +27,7 @@ private:
         "LinearClamp",
         "LinearWrap",
         "AnisotropicClamp",
-        "AnisotropicWrap",
+        "AnisotropicWrap"
     };
 
     InputState inputState;
@@ -40,6 +40,7 @@ private:
     SDL_GPUBuffer* indexBuffer {nullptr};
     SDL_GPUTexture* texture {nullptr};
     array<SDL_GPUSampler*, 6> samplers {};
+    int currentSamplerIndex {0};
 };
 
 
