@@ -24,6 +24,11 @@ public:
 
 protected:
     static bool ManageInput(InputState &inputState) {
+        inputState.previousLeft = inputState.left;
+        inputState.previousRight = inputState.right;
+        inputState.previousUp = inputState.up;
+        inputState.previousDown = inputState.down;
+
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {

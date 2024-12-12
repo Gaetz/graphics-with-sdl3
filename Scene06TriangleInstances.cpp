@@ -125,19 +125,19 @@ void Scene06TriangleInstances::Load(Renderer& renderer) {
 bool Scene06TriangleInstances::Update(float dt) {
     const bool isRunning = ManageInput(inputState);
 
-    if (inputState.left)
+    if (inputState.IsPressed(DirectionalKey::Left))
     {
         useVertexOffset = !useVertexOffset;
         SDL_Log("Using vertex offset: %s", useVertexOffset ? "true" : "false");
     }
 
-    if (inputState.right)
+    if (inputState.IsPressed(DirectionalKey::Right))
     {
         useIndexOffset = !useIndexOffset;
         SDL_Log("Using index offset: %s", useIndexOffset ? "true" : "false");
     }
 
-    if (inputState.up)
+    if (inputState.IsPressed(DirectionalKey::Up))
     {
         useIndexBuffer = !useIndexBuffer;
         SDL_Log("Using index buffer: %s", useIndexBuffer ? "true" : "false");

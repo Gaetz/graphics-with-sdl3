@@ -126,7 +126,7 @@ void Scene04TriangleCullModes::Load(Renderer& renderer) {
 bool Scene04TriangleCullModes::Update(float dt) {
     const bool isRunning = ManageInput(inputState);
 
-    if (inputState.left)
+    if (inputState.IsPressed(DirectionalKey::Left))
     {
         currentMode -= 1;
         if (currentMode < 0)
@@ -136,7 +136,7 @@ bool Scene04TriangleCullModes::Update(float dt) {
         SDL_Log("Current Mode: %s", modeNames[currentMode].c_str());
     }
 
-    if (inputState.right)
+    if (inputState.IsPressed(DirectionalKey::Right))
     {
         currentMode = (currentMode + 1) % pipelines.size();
         SDL_Log("Current Mode: %s", modeNames[currentMode].c_str());

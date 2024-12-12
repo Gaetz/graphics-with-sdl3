@@ -97,7 +97,7 @@ void Scene05TriangleStencil::Load(Renderer& renderer) {
     };
 
 	maskerPipeline = SDL_CreateGPUGraphicsPipeline(renderer.device, &pipelineCreateInfo);
-	if (maskerPipeline == NULL)
+	if (maskerPipeline == nullptr)
 	{
 		SDL_Log("Failed to create masker pipeline!");
 	}
@@ -121,7 +121,7 @@ void Scene05TriangleStencil::Load(Renderer& renderer) {
         };
 
 	maskeePipeline = SDL_CreateGPUGraphicsPipeline(renderer.device, &pipelineCreateInfo);
-	if (maskeePipeline == NULL)
+	if (maskeePipeline == nullptr)
 	{
 		SDL_Log("Failed to create maskee pipeline!");
 	}
@@ -375,17 +375,17 @@ bool Scene05TriangleStencil::Update(float dt) {
 void Scene05TriangleStencil::Draw(Renderer& renderer) {
 
     SDL_GPUCommandBuffer* cmdbuf = SDL_AcquireGPUCommandBuffer(renderer.device);
-    if (cmdbuf == NULL)
+    if (cmdbuf == nullptr)
     {
         SDL_Log("AcquireGPUCommandBuffer failed: %s", SDL_GetError());
     }
 
     SDL_GPUTexture* swapchainTexture;
-    if (!SDL_AcquireGPUSwapchainTexture(cmdbuf, renderer.renderWindow, &swapchainTexture, NULL, NULL)) {
+    if (!SDL_AcquireGPUSwapchainTexture(cmdbuf, renderer.renderWindow, &swapchainTexture, nullptr, nullptr)) {
         SDL_Log("AcquireGPUSwapchainTexture failed: %s", SDL_GetError());
     }
 
-    if (swapchainTexture != NULL)
+    if (swapchainTexture != nullptr)
     {
         SDL_GPUColorTargetInfo colorTargetInfo = { 0 };
         colorTargetInfo.texture = swapchainTexture;

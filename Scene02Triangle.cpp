@@ -53,13 +53,13 @@ void Scene02Triangle::Load(Renderer& renderer) {
 bool Scene02Triangle::Update(float dt) {
     const bool isRunning = ManageInput(inputState);
 
-    if (inputState.left) {
+    if (inputState.IsPressed(DirectionalKey::Left)) {
         useWireframeMode = !useWireframeMode;
     }
-    if (inputState.down) {
+    if (inputState.IsPressed(DirectionalKey::Up)) {
         useSmallViewport = !useSmallViewport;
     }
-    if (inputState.right) {
+    if (inputState.IsPressed(DirectionalKey::Right)) {
         useScissorRect = !useScissorRect;
     }
 

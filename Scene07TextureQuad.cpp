@@ -6,6 +6,7 @@
 #include "Renderer.hpp"
 #include "PositionTextureVertex.hpp"
 #include <SDL3/SDL.h>
+#include <cstring>
 
 void Scene07TextureQuad::Load(Renderer& renderer) {
     basePath = SDL_GetBasePath();
@@ -178,7 +179,7 @@ void Scene07TextureQuad::Load(Renderer& renderer) {
 	auto textureTransferData = static_cast<PositionTextureVertex *>(
 		renderer.MapTransferBuffer(textureTransferBuffer, false)
 	);
-	SDL_memcpy(textureTransferData, imageData->pixels, imageData->w * imageData->h * 4);
+	std::memcpy(textureTransferData, imageData->pixels, imageData->w * imageData->h * 4);
 	renderer.UnmapTransferBuffer(textureTransferBuffer);
 
 
@@ -228,7 +229,7 @@ void Scene07TextureQuad::Load(Renderer& renderer) {
 bool Scene07TextureQuad::Update(float dt) {
     const bool isRunning = ManageInput(inputState);
 
-    if (inputState.left)
+    if (inputState.IsPressed(DirectionalKey::Left))
     {
     	currentSamplerIndex -= 1;
     	if (currentSamplerIndex < 0)
@@ -238,7 +239,7 @@ bool Scene07TextureQuad::Update(float dt) {
     	SDL_Log("Setting sampler state to: %s", samplerNames[currentSamplerIndex].c_str());
     }
 
-    if (inputState.right)
+    if (inputState.IsPressed(DirectionalKey::Right))
     {
     	currentSamplerIndex = (currentSamplerIndex + 1) % samplers.size();
     	SDL_Log("Setting sampler state to: %s", samplerNames[currentSamplerIndex].c_str());
