@@ -13,6 +13,7 @@
 #include "Scene05TriangleStencil.hpp"
 #include "Scene06TriangleInstances.hpp"
 #include "Scene07TextureQuad.hpp"
+#include "Scene08TextureQuadMoving.hpp"
 #include "Time.hpp"
 #include "Window.hpp"
 
@@ -25,7 +26,7 @@ int main(int argc, char **argv) {
     window.Init();
     renderer.Init(window);
 
-    auto scene = std::make_unique<Scene07TextureQuad>();
+    auto scene = std::make_unique<Scene08TextureQuadMoving>();
     scene->Load(renderer);
 
     bool isRunning { true };
@@ -34,8 +35,6 @@ int main(int argc, char **argv) {
 
         isRunning = scene->Update(dt);
         scene->Draw(renderer);
-
-
 
         time.DelayTime();
     }

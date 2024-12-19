@@ -71,6 +71,9 @@ public:
     void ReleaseBuffer(SDL_GPUBuffer* buffer) const;
     void ReleaseGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const;
 
+    void PushVertexUniformData(uint32_t slot, const void* data, Uint32 size) const;
+    void PushFragmentUniformData(uint32_t slot, const void* data, Uint32 size) const;
+
     SDL_GPUDevice* device {nullptr};
     SDL_Window* renderWindow {nullptr};
     SDL_GPUCommandBuffer* cmdBuffer {nullptr};

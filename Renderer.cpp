@@ -277,5 +277,13 @@ void Renderer::ReleaseGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const 
 	SDL_ReleaseGPUGraphicsPipeline(device, pipeline);
 }
 
+void Renderer::PushVertexUniformData(uint32_t slot, const void* data, Uint32 size) const {
+    SDL_PushGPUVertexUniformData(cmdBuffer, 0, data, size);
+}
+
+void Renderer::PushFragmentUniformData(uint32_t slot, const void* data, Uint32 size) const {
+    SDL_PushGPUFragmentUniformData(cmdBuffer, 0, data, size);
+}
+
 
 
