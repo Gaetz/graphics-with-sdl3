@@ -50,6 +50,16 @@ Mat4 Mat4::CreateRotationMatrix(float x, float y, float z, float angle) {
     return result;
 }
 
+Mat4 Mat4::CreateRotationZ(float radians) {
+        return Mat4 {
+                cosf(radians), sinf(radians), 0, 0,
+                -sinf(radians), cosf(radians), 0, 0,
+                0, 	0, 1, 0,
+                0,	0, 0, 1
+        };
+}
+
+
 Mat4 Mat4::CreateTranslation(float x, float y, float z)
 {
     return Mat4 {

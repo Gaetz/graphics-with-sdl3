@@ -11,8 +11,8 @@
 
 void Scene08TextureQuadMoving::Load(Renderer& renderer) {
     basePath = SDL_GetBasePath();
-    vertexShader = renderer.LoadShader(basePath, "TexturedQuadWithMatrix.vert", 0, 0, 0, 0);
-    fragmentShader = renderer.LoadShader(basePath, "TexturedQuadWithMultiplyColor.frag", 1, 0, 0, 0);
+    vertexShader = renderer.LoadShader(basePath, "TexturedQuadWithMatrix.vert", 0, 1, 0, 0);
+    fragmentShader = renderer.LoadShader(basePath, "TexturedQuadWithMultiplyColor.frag", 1, 1, 0, 0);
 
     SDL_Surface* imageData = renderer.LoadBMPImage(basePath, "ravioli.bmp", 4);
     if (imageData == nullptr) {
@@ -141,7 +141,7 @@ void Scene08TextureQuadMoving::Load(Renderer& renderer) {
 	auto textureTransferData = static_cast<PositionTextureVertex *>(
 		renderer.MapTransferBuffer(textureTransferBuffer, false)
 	);
-	std::memcpy(textureTransferData, imageData->pixels, imageData->w * imageData->h * 4);
+	std::memcpy(textureTransferData, imageData->pixels, bufferSize);
 	renderer.UnmapTransferBuffer(textureTransferBuffer);
 
 
@@ -199,17 +199,13 @@ void Scene08TextureQuadMoving::Draw(Renderer& renderer) {
     renderer.BindVertexBuffers(0, vertexBindings, 1);
     SDL_GPUBufferBinding indexBindings { .buffer = indexBuffer, .offset = 0 };
     renderer.BindIndexBuffer(indexBindings, SDL_GPU_INDEXELEMENTSIZE_16BIT);
-
-	SDL_GPUTextureSamplerBinding textureSamplerBinding {
-		.texture = texture,
-		.sampler = sampler
-	};
+	SDL_GPUTextureSamplerBinding textureSamplerBinding { .texture = texture, .sampler = sampler };
 	renderer.BindFragmentSamplers(0, textureSamplerBinding, 1);
 
 
     // Top-left
     Mat4 matrixUniform =
-            Mat4::CreateRotationMatrix(0.0f, 0.0f, 1.0f, time) *
+            Mat4::CreateRotationZ(time) *
             Mat4::CreateTranslation(-0.5f, -0.5f, 0);
     renderer.PushVertexUniformData(0, &matrixUniform, sizeof(matrixUniform));
     FragMultiplyUniform fragMultiplyUniform0 { 1.0f, 0.5f + SDL_sinf(time) * 0.5f, 1.0f, 1.0f };
@@ -218,7 +214,7 @@ void Scene08TextureQuadMoving::Draw(Renderer& renderer) {
 
     // Top-right
     matrixUniform =
-            Mat4::CreateRotationMatrix(0.0f, 0.0f, 1.0f, (2.0f * SDL_PI_F) - time) *
+            Mat4::CreateRotationZ((2.0f * SDL_PI_F) - time) *
             Mat4::CreateTranslation(0.5f, -0.5f, 0);
     renderer.PushVertexUniformData(0, &matrixUniform, sizeof(matrixUniform));
     FragMultiplyUniform fragMultiplyUniform1 { 1.0f, 0.5f + SDL_cosf(time) * 0.5f, 1.0f, 1.0f };
@@ -227,7 +223,7 @@ void Scene08TextureQuadMoving::Draw(Renderer& renderer) {
 
     // Bottom-left
     matrixUniform =
-            Mat4::CreateRotationMatrix(0.0f, 0.0f, 1.0f, time) *
+            Mat4::CreateRotationZ(time) *
             Mat4::CreateTranslation(-0.5f, 0.5f, 0);
     renderer.PushVertexUniformData(0, &matrixUniform, sizeof(matrixUniform));
     FragMultiplyUniform fragMultiplyUniform2 { 1.0f, 0.5f + SDL_sinf(time) * 0.2f, 1.0f, 1.0f };
@@ -236,7 +232,7 @@ void Scene08TextureQuadMoving::Draw(Renderer& renderer) {
 
     // Bottom-right
     matrixUniform =
-            Mat4::CreateRotationMatrix(0.0f, 0.0f, 1.0f, time) *
+            Mat4::CreateRotationZ(time) *
             Mat4::CreateTranslation(0.5f, 0.5f, 0);
     renderer.PushVertexUniformData(0, &matrixUniform, sizeof(matrixUniform));
     FragMultiplyUniform fragMultiplyUniform3 { 1.0f, 0.5f + SDL_cosf(time) * 1.0f, 1.0f, 1.0f };
