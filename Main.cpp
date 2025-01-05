@@ -26,7 +26,7 @@ int main(int argc, char **argv) {
     window.Init();
     renderer.Init(window);
 
-    auto scene = std::make_unique<Scene08TextureQuadMoving>();
+    auto scene = std::make_unique<Scene01Clear>();
     scene->Load(renderer);
 
     bool isRunning { true };

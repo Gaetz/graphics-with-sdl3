@@ -33,7 +33,7 @@ void Renderer::Begin(SDL_GPUDepthStencilTargetInfo* depthStencilTargetInfo) {
     if (swapchainTexture != nullptr) {
         SDL_GPUColorTargetInfo colorTargetInfo = {};
         colorTargetInfo.texture = swapchainTexture;
-        colorTargetInfo.clear_color = SDL_FColor { 0.0f, 0.0f, 0.0f, 1.0f };
+        colorTargetInfo.clear_color = SDL_FColor { 0.392f, 0.584f, 0.929f, 1.0f };
         colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
         colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
 
