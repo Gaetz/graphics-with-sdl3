@@ -26,22 +26,22 @@ void Scene02Triangle::Load(Renderer& renderer) {
     };
 
     pipelineCreateInfo.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
-    fillPipeline = SDL_CreateGPUGraphicsPipeline(renderer.device, &pipelineCreateInfo);
+    fillPipeline = renderer.CreateGPUGraphicsPipeline(pipelineCreateInfo);
     if (fillPipeline == nullptr)
     {
         SDL_Log("Failed to create fill pipeline!");
     }
 
     pipelineCreateInfo.rasterizer_state.fill_mode = SDL_GPU_FILLMODE_LINE;
-    linePipeline = SDL_CreateGPUGraphicsPipeline(renderer.device, &pipelineCreateInfo);
+    linePipeline = renderer.CreateGPUGraphicsPipeline(pipelineCreateInfo);
     if (linePipeline == nullptr)
     {
         SDL_Log("Failed to create line pipeline!");
     }
 
     // Clean up shader resources
-    SDL_ReleaseGPUShader(renderer.device, vertexShader);
-    SDL_ReleaseGPUShader(renderer.device, fragmentShader);
+    renderer.ReleaseShader(vertexShader);
+    renderer.ReleaseShader(fragmentShader);
 
     // Finally, print instructions!
     SDL_Log("Press Left to toggle wireframe mode");
