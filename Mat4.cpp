@@ -2,8 +2,12 @@
 // Created by gaetz on 24/09/2024.
 //
 
-#include <cstdlib>
 #include "Mat4.hpp"
+#ifdef __APPLE__
+    #include <cmath>
+#else
+    #include <cstdlib>
+#endif
 
     const Mat4 Mat4::Identity { 1.0f, 0.0f, 0.0f, 0.0f,
                                 0.0f, 1.0f, 0.0f, 0.0f,
