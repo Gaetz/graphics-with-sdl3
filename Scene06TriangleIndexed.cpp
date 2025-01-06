@@ -2,12 +2,12 @@
 // Created by Gaëtan Blaise-Cazalet on 29/11/2024.
 //
 
-#include "Scene06TriangleInstances.hpp"
+#include "Scene06TriangleIndexed.hpp"
 #include "Renderer.hpp"
 #include "PositionColorVertex.hpp"
 #include <SDL3/SDL.h>
 
-void Scene06TriangleInstances::Load(Renderer& renderer) {
+void Scene06TriangleIndexed::Load(Renderer& renderer) {
     basePath = SDL_GetBasePath();
     vertexShader = renderer.LoadShader(basePath, "PositionColorInstanced.vert", 0, 0, 0, 0);
     fragmentShader = renderer.LoadShader(basePath, "SolidColor.frag", 0, 0, 0, 0);
@@ -122,7 +122,7 @@ void Scene06TriangleInstances::Load(Renderer& renderer) {
     renderer.EndUploadToBuffer(transferBuffer);
 }
 
-bool Scene06TriangleInstances::Update(float dt) {
+bool Scene06TriangleIndexed::Update(float dt) {
     const bool isRunning = ManageInput(inputState);
 
     if (inputState.IsPressed(DirectionalKey::Left))
@@ -146,7 +146,7 @@ bool Scene06TriangleInstances::Update(float dt) {
     return isRunning;
 }
 
-void Scene06TriangleInstances::Draw(Renderer& renderer) {
+void Scene06TriangleIndexed::Draw(Renderer& renderer) {
     Uint32 vertexOffset = useVertexOffset ? 3 : 0;
     Uint32 indexOffset = useIndexOffset ? 3 : 0;
 
@@ -167,7 +167,7 @@ void Scene06TriangleInstances::Draw(Renderer& renderer) {
     renderer.End();
 }
 
-void Scene06TriangleInstances::Unload(Renderer& renderer) {
+void Scene06TriangleIndexed::Unload(Renderer& renderer) {
     renderer.ReleaseBuffer(vertexBuffer);
     renderer.ReleaseBuffer(indexBuffer);
     renderer.ReleaseGraphicsPipeline(pipeline);

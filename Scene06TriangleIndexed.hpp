@@ -2,8 +2,8 @@
 // Created by Gaëtan Blaise-Cazalet on 20/11/2024.
 //
 
-#ifndef SCENE06TRIANGLEINSTANCES_HPP
-#define SCENE06TRIANGLEINSTANCES_HPP
+#ifndef SCENE06TRIANGLEINDEXED_HPP
+#define SCENE06TRIANGLEINDEXED_HPP
 
 #include <SDL3/SDL_gpu.h>
 #include "Scene.hpp"
@@ -13,7 +13,7 @@
 using std::array;
 using std::string;
 
-class Scene06TriangleInstances : public Scene {
+class Scene06TriangleIndexed : public Scene {
 public:
     void Load(Renderer& renderer) override;
     bool Update(float dt) override;
@@ -36,4 +36,4 @@ private:
 
 
 
-#endif //SCENE06TRIANGLEINSTANCES_HPP
+#endif //SCENE06TRIANGLEINDEXED_HPP

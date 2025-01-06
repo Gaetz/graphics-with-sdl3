@@ -11,7 +11,7 @@
 #include "Scene03TriangleVertexBuffer.hpp"
 #include "Scene04TriangleCullModes.hpp"
 #include "Scene05TriangleStencil.hpp"
-#include "Scene06TriangleInstances.hpp"
+#include "Scene06TriangleIndexed.hpp"
 #include "Scene07TextureQuad.hpp"
 #include "Scene08TextureQuadMoving.hpp"
 #include "Time.hpp"
