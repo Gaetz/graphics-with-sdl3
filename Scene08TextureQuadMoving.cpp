@@ -243,7 +243,7 @@ void Scene08TextureQuadMoving::Draw(Renderer& renderer) {
 }
 
 void Scene08TextureQuadMoving::Unload(Renderer& renderer) {
-    SDL_ReleaseGPUSampler(renderer.device, sampler);
+    renderer.ReleaseSampler(sampler);
     renderer.ReleaseBuffer(vertexBuffer);
     renderer.ReleaseBuffer(indexBuffer);
 	renderer.ReleaseTexture(texture);

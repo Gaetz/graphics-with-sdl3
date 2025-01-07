@@ -39,6 +39,4 @@ private:
     float time {0};
 };
 
-
-
 #endif //SCENE08TEXTUREQUADMOVING_HPP

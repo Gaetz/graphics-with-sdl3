@@ -145,7 +145,7 @@ void Scene07TextureQuad::Load(Renderer& renderer) {
 	texture = renderer.CreateTexture(textureInfo);
 	renderer.SetTextureName(texture,"Ravioli Texture");
 
-    // Set the buffer data
+    // Set the transfer buffer
     SDL_GPUTransferBufferCreateInfo transferBufferCreateInfo = {
         .usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD,
         .size = (sizeof(PositionTextureVertex) * 4) + (sizeof(Uint16) * 6),
@@ -270,7 +270,7 @@ void Scene07TextureQuad::Draw(Renderer& renderer) {
 void Scene07TextureQuad::Unload(Renderer& renderer) {
 	for (int i = 0; i < SDL_arraysize(samplers); i += 1)
 	{
-		SDL_ReleaseGPUSampler(renderer.device, samplers[i]);
+		renderer.ReleaseSampler(samplers[i]);
 	}
 	currentSamplerIndex = 0;
     renderer.ReleaseBuffer(vertexBuffer);

@@ -29,9 +29,7 @@ private:
     SDL_GPUGraphicsPipeline* pipeline;
     SDL_GPUBuffer* vertexBuffer;
     SDL_GPUBuffer* indexBuffer;
-    bool useVertexOffset = false;
-    bool useIndexOffset = false;
-    bool useIndexBuffer = true;
+    bool useIndexBuffer { true };
 };
 
 

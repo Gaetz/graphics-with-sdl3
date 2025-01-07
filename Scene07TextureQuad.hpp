@@ -43,6 +43,4 @@ private:
     int currentSamplerIndex {0};
 };
 
-
-
 #endif //SCENE07TEXTUREQUAD_HPP

@@ -233,6 +233,10 @@ void Renderer::ReleaseTexture(SDL_GPUTexture* texture) const {
 	SDL_ReleaseGPUTexture(device, texture);
 }
 
+void Renderer::ReleaseSampler(SDL_GPUSampler* sampler) const {
+    SDL_ReleaseGPUSampler(device, sampler);
+}
+
 void Renderer::BeginUploadToBuffer() {
     uploadCmdBuf = SDL_AcquireGPUCommandBuffer(device);
     copyPass = SDL_BeginGPUCopyPass(uploadCmdBuf);

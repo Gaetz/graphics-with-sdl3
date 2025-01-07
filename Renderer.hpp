@@ -37,6 +37,7 @@ public:
     SDL_GPUTexture* CreateTexture(const SDL_GPUTextureCreateInfo& createInfo) const;
     void SetTextureName(SDL_GPUTexture* texture, const string& name) const;
     void ReleaseTexture(SDL_GPUTexture* texture) const;
+    void ReleaseSampler(SDL_GPUSampler* sampler) const;
 
 
     SDL_GPUGraphicsPipeline* CreateGPUGraphicsPipeline(const SDL_GPUGraphicsPipelineCreateInfo& createInfo) const;
