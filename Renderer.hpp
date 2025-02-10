@@ -14,9 +14,10 @@ using std::string;
 
 class Window;
 
-class Renderer {
+class Renderer
+{
 public:
-    void Init(Window &window);
+    void Init(Window& window);
     void Begin(SDL_GPUDepthStencilTargetInfo* depthStencilTargetInfo = nullptr);
     void End() const;
     void Close() const;
@@ -47,12 +48,14 @@ public:
     void BindFragmentSamplers(Uint32 firstSlot, const SDL_GPUTextureSamplerBinding& bindings, Uint32 numBindings) const;
 
     void DrawPrimitives(int numVertices, int numInstances, int firstVertex, int firstInstance) const;
-    void DrawIndexedPrimitives(int numIndices, int numInstances, int firstIndex, int vertexOffset, int firstInstance) const;
+    void DrawIndexedPrimitives(int numIndices, int numInstances, int firstIndex, int vertexOffset,
+                               int firstInstance) const;
 
     void SetViewport(const SDL_GPUViewport& viewport) const;
     void SetScissorRect(const SDL_Rect& rect) const;
     void SetStencilReference(Uint8 stencilReference) const;
-    bool DoesTextureSupportFormat(SDL_GPUTextureFormat format, SDL_GPUTextureType type, SDL_GPUTextureUsageFlags usageFlags) const;
+    bool DoesTextureSupportFormat(SDL_GPUTextureFormat format, SDL_GPUTextureType type,
+                                  SDL_GPUTextureUsageFlags usageFlags) const;
 
 
     SDL_GPUBuffer* CreateBuffer(const SDL_GPUBufferCreateInfo& createInfo) const;
@@ -64,9 +67,9 @@ public:
 
     void BeginUploadToBuffer();
     void UploadToBuffer(const SDL_GPUTransferBufferLocation& source,
-                           const SDL_GPUBufferRegion& destination, bool cycle) const;
+                        const SDL_GPUBufferRegion& destination, bool cycle) const;
     void UploadToTexture(const SDL_GPUTextureTransferInfo& source,
-                           const SDL_GPUTextureRegion& destination, bool cycle) const;
+                         const SDL_GPUTextureRegion& destination, bool cycle) const;
     void EndUploadToBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
 
     void ReleaseBuffer(SDL_GPUBuffer* buffer) const;
@@ -75,16 +78,26 @@ public:
     void PushVertexUniformData(uint32_t slot, const void* data, Uint32 size) const;
     void PushFragmentUniformData(uint32_t slot, const void* data, Uint32 size) const;
 
-    SDL_GPUDevice* device {nullptr};
-    SDL_Window* renderWindow {nullptr};
-    SDL_GPUCommandBuffer* cmdBuffer {nullptr};
-    SDL_GPUTexture* swapchainTexture {nullptr};
-    SDL_GPURenderPass* renderPass {nullptr};
+    SDL_GPUComputePipeline* CreateComputePipelineFromShader(const char* basePath, const char* shaderFilename,
+                                                            SDL_GPUComputePipelineCreateInfo* createInfo);
+    void BeginCompute(SDL_GPUStorageTextureReadWriteBinding* storageTextureBindings, Uint32 numStorageTextureBindings,
+                      SDL_GPUStorageBufferReadWriteBinding* storageBufferBindings, Uint32 numStorageBufferBindings);
+    void DispatchCompute(SDL_GPUComputePipeline* computePipeline, Uint32 groupCountX, Uint32 groupCountY,
+                         Uint32 groupCountZ);
+    void EndCompute();
+    void ReleaseComputePipeline(SDL_GPUComputePipeline* computePipeline) const;
 
-    SDL_GPUCommandBuffer* uploadCmdBuf {nullptr};
-    SDL_GPUCopyPass* copyPass {nullptr};
+    SDL_GPUDevice* device{nullptr};
+    SDL_Window* renderWindow{nullptr};
+    SDL_GPUCommandBuffer* cmdBuffer{nullptr};
+    SDL_GPUTexture* swapchainTexture{nullptr};
+    SDL_GPURenderPass* renderPass{nullptr};
+
+    SDL_GPUCommandBuffer* uploadCmdBuf{nullptr};
+    SDL_GPUCopyPass* copyPass{nullptr};
+
+    SDL_GPUComputePass* computePass{nullptr};
 };
-
 
 
 #endif //RENDERER_HPP
