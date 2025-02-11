@@ -97,6 +97,8 @@ public:
     SDL_GPUCopyPass* copyPass{nullptr};
 
     SDL_GPUComputePass* computePass{nullptr};
+    SDL_GPUCommandBuffer* computeCmdBuffer{nullptr};
+
 };
 
 

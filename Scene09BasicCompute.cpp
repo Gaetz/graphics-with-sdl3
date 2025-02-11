@@ -1,5 +1,5 @@
 //
-// Created by Gaëtan Blaise-Cazalet on 19/11/2024.
+// Created by Gaëtan Blaise-Cazalet on 10/02/2025.
 //
 
 #include "Scene09BasicCompute.hpp"
@@ -21,7 +21,7 @@ void Scene09BasicCompute::Load(Renderer& renderer) {
         .threadcount_y = 8,
         .threadcount_z = 1,
     };
-    renderer.CreateComputePipelineFromShader(basePath, "FillTexture.comp", &computePipelineCreateInfo);
+    computePipeline = renderer.CreateComputePipelineFromShader(basePath, "FillTexture.comp", &computePipelineCreateInfo);
 
 
     // -- Graphics pipeline
@@ -151,6 +151,7 @@ void Scene09BasicCompute::Load(Renderer& renderer) {
     renderer.UploadToBuffer(transferIndexBufferLocation, indexBufferRegion, false);
     renderer.EndUploadToBuffer(transferBuffer);
 
+    // Execute compute shader to fill the texture
     SDL_GPUStorageTextureReadWriteBinding storageTexture {
         .texture = screenTexture
     };
@@ -174,12 +175,17 @@ void Scene09BasicCompute::Draw(Renderer& renderer) {
     renderer.BindVertexBuffers(0, vertexBindings, 1);
     SDL_GPUBufferBinding indexBindings { .buffer = indexBuffer, .offset = 0 };
     renderer.BindIndexBuffer(indexBindings, SDL_GPU_INDEXELEMENTSIZE_16BIT);
+    renderer.BindFragmentSamplers(0, SDL_GPUTextureSamplerBinding { .texture = screenTexture, .sampler = sampler }, 1);
     renderer.DrawIndexedPrimitives(6, 1, 0, 0, 0);
 
     renderer.End();
 }
 
 void Scene09BasicCompute::Unload(Renderer& renderer) {
+    renderer.ReleaseBuffer(vertexBuffer);
+    renderer.ReleaseBuffer(indexBuffer);
+    renderer.ReleaseSampler(sampler);
+    renderer.ReleaseTexture(screenTexture);
     renderer.ReleaseGraphicsPipeline(graphicsPipeline);
-
+    renderer.ReleaseComputePipeline(computePipeline);
 }

@@ -6,20 +6,20 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 cmake_policy(SET CMP0135 NEW)
 
 # SDL3
-set(SDL3_VERSION 3.1.6)
+set(SDL3_VERSION 3.2.4)
 find_package(SDL3 ${SDL3_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT SDL3_FOUND) # If there's none, fetch and build SDL3
     include(FetchContent)
     if (UNIX)
         FetchContent_Declare(
                 SDL3
-                URL https://github.com/libsdl-org/SDL/archive/refs/tags/preview-${SDL3_VERSION}.tar.gz
+                URL https://github.com/libsdl-org/SDL/releases/download/release-${SDL3_VERSION}/SDL3-${SDL3_VERSION}.tar.gz
         )
         FetchContent_MakeAvailable(SDL3)
     elseif (WIN32)
         FetchContent_Declare(
                 SDL3
-                URL https://github.com/libsdl-org/SDL/archive/refs/tags/preview-${SDL3_VERSION}.zip
+                URL https://github.com/libsdl-org/SDL/releases/download/release-${SDL3_VERSION}/SDL3-${SDL3_VERSION}.zip
         )
         FetchContent_MakeAvailable(SDL3)
     endif()

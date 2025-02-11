@@ -13,9 +13,9 @@
 void Renderer::Init(Window& window) {
     renderWindow = window.sdlWindow;
     device = SDL_CreateGPUDevice(
-        SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
-        true,
-        nullptr);
+            SDL_GPU_SHADERFORMAT_SPIRV | SDL_GPU_SHADERFORMAT_DXIL | SDL_GPU_SHADERFORMAT_MSL,
+            true,
+            nullptr);
     SDL_ClaimWindowForGPUDevice(device, renderWindow);
 }
 
@@ -24,16 +24,14 @@ void Renderer::Begin(SDL_GPUDepthStencilTargetInfo* depthStencilTargetInfo) {
     if (cmdBuffer == nullptr) { SDL_Log("AcquireGPUCommandBuffer failed: %s", SDL_GetError()); }
 
     SDL_GPUTexture* swapchainTexture;
-    if (!SDL_AcquireGPUSwapchainTexture(cmdBuffer, renderWindow, &swapchainTexture, nullptr, nullptr))
-    {
+    if (!SDL_WaitAndAcquireGPUSwapchainTexture(cmdBuffer, renderWindow, &swapchainTexture, nullptr, nullptr)) {
         SDL_Log("AcquireGPUSwapchainTexture failed: %s", SDL_GetError());
     }
 
-    if (swapchainTexture != nullptr)
-    {
+    if (swapchainTexture != nullptr) {
         SDL_GPUColorTargetInfo colorTargetInfo = {};
         colorTargetInfo.texture = swapchainTexture;
-        colorTargetInfo.clear_color = SDL_FColor{0.0f, 0.0f, 0.0f, 1.0f};
+        colorTargetInfo.clear_color = SDL_FColor { 0.0f, 0.0f, 0.0f, 1.0f };
         colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
         colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
 
@@ -52,18 +50,19 @@ void Renderer::Close() const {
 }
 
 SDL_GPUShader* Renderer::LoadShader(
-    const char* basePath,
-    const char* shaderFilename,
-    Uint32 samplerCount,
-    Uint32 uniformBufferCount,
-    Uint32 storageBufferCount,
-    Uint32 storageTextureCount
+        const char* basePath,
+        const char* shaderFilename,
+        Uint32 samplerCount,
+        Uint32 uniformBufferCount,
+        Uint32 storageBufferCount,
+        Uint32 storageTextureCount
 ) {
     // Auto-detect the shader stage from the file name for convenience
     SDL_GPUShaderStage stage;
-    if (SDL_strstr(shaderFilename, ".vert")) { stage = SDL_GPU_SHADERSTAGE_VERTEX; } else if (
-        SDL_strstr(shaderFilename, ".frag")) { stage = SDL_GPU_SHADERSTAGE_FRAGMENT; } else
-    {
+    if (SDL_strstr(shaderFilename, ".vert")) { stage = SDL_GPU_SHADERSTAGE_VERTEX; }
+    else if (
+            SDL_strstr(shaderFilename, ".frag")) { stage = SDL_GPU_SHADERSTAGE_FRAGMENT; }
+    else {
         SDL_Log("Invalid shader stage!");
         return nullptr;
     }
@@ -73,49 +72,43 @@ SDL_GPUShader* Renderer::LoadShader(
     SDL_GPUShaderFormat format = SDL_GPU_SHADERFORMAT_INVALID;
     const char* entrypoint;
 
-    if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV)
-    {
+    if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV) {
         SDL_snprintf(fullPath, sizeof(fullPath), "%sContent/Shaders/Compiled/SPIRV/%s.spv", basePath, shaderFilename);
         format = SDL_GPU_SHADERFORMAT_SPIRV;
         entrypoint = "main";
-    } else if (backendFormats & SDL_GPU_SHADERFORMAT_MSL)
-    {
+    } else if (backendFormats & SDL_GPU_SHADERFORMAT_MSL) {
         SDL_snprintf(fullPath, sizeof(fullPath), "%sContent/Shaders/Compiled/MSL/%s.msl", basePath, shaderFilename);
         format = SDL_GPU_SHADERFORMAT_MSL;
         entrypoint = "main0";
-    } else if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL)
-    {
+    } else if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL) {
         SDL_snprintf(fullPath, sizeof(fullPath), "%sContent/Shaders/Compiled/DXIL/%s.dxil", basePath, shaderFilename);
         format = SDL_GPU_SHADERFORMAT_DXIL;
         entrypoint = "main";
-    } else
-    {
+    } else {
         SDL_Log("%s", "Unrecognized backend shader format!");
         return nullptr;
     }
 
     size_t codeSize;
     void* code = SDL_LoadFile(fullPath, &codeSize);
-    if (code == nullptr)
-    {
+    if (code == nullptr) {
         SDL_Log("Failed to load shader from disk! %s", fullPath);
         return nullptr;
     }
 
     SDL_GPUShaderCreateInfo shaderInfo = {
-        .code_size = codeSize,
-        .code = static_cast<Uint8*>(code),
-        .entrypoint = entrypoint,
-        .format = format,
-        .stage = stage,
-        .num_samplers = samplerCount,
-        .num_storage_textures = storageTextureCount,
-        .num_storage_buffers = storageBufferCount,
-        .num_uniform_buffers = uniformBufferCount
+            .code_size = codeSize,
+            .code = static_cast<Uint8*>(code),
+            .entrypoint = entrypoint,
+            .format = format,
+            .stage = stage,
+            .num_samplers = samplerCount,
+            .num_storage_textures = storageTextureCount,
+            .num_storage_buffers = storageBufferCount,
+            .num_uniform_buffers = uniformBufferCount
     };
     SDL_GPUShader* shader = SDL_CreateGPUShader(device, &shaderInfo);
-    if (shader == nullptr)
-    {
+    if (shader == nullptr) {
         SDL_Log("Failed to create shader!");
         SDL_free(code);
         return nullptr;
@@ -130,6 +123,7 @@ void Renderer::BindGraphicsPipeline(SDL_GPUGraphicsPipeline* pipeline) const {
 }
 
 void Renderer::SetViewport(const SDL_GPUViewport& viewport) const { SDL_SetGPUViewport(renderPass, &viewport); }
+
 void Renderer::SetScissorRect(const SDL_Rect& rect) const { SDL_SetGPUScissor(renderPass, &rect); }
 
 void Renderer::SetStencilReference(Uint8 stencilReference) const {
@@ -163,21 +157,19 @@ SDL_Surface* Renderer::LoadBMPImage(const char* basePath, const char* imageFilen
     SDL_snprintf(fullPath, sizeof(fullPath), "%sContent/Images/%s", basePath, imageFilename);
 
     SDL_Surface* result = SDL_LoadBMP(fullPath);
-    if (result == nullptr)
-    {
+    if (result == nullptr) {
         SDL_Log("Failed to load BMP: %s", SDL_GetError());
         return nullptr;
     }
 
-    if (desiredChannels == 4) { format = SDL_PIXELFORMAT_ABGR8888; } else
-    {
+    if (desiredChannels == 4) { format = SDL_PIXELFORMAT_ABGR8888; }
+    else {
         SDL_assert(!"Unexpected desiredChannels");
         SDL_DestroySurface(result);
         return nullptr;
     }
 
-    if (result->format != format)
-    {
+    if (result->format != format) {
         SDL_Surface* next = SDL_ConvertSurface(result, format);
         SDL_DestroySurface(result);
         result = next;
@@ -283,31 +275,26 @@ SDL_GPUComputePipeline* Renderer::CreateComputePipelineFromShader(const char* ba
     SDL_GPUShaderFormat format = SDL_GPU_SHADERFORMAT_INVALID;
     const char* entrypoint;
 
-    if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV)
-    {
+    if (backendFormats & SDL_GPU_SHADERFORMAT_SPIRV) {
         SDL_snprintf(fullPath, sizeof(fullPath), "%sContent/Shaders/Compiled/SPIRV/%s.spv", basePath, shaderFilename);
         format = SDL_GPU_SHADERFORMAT_SPIRV;
         entrypoint = "main";
-    } else if (backendFormats & SDL_GPU_SHADERFORMAT_MSL)
-    {
+    } else if (backendFormats & SDL_GPU_SHADERFORMAT_MSL) {
         SDL_snprintf(fullPath, sizeof(fullPath), "%sContent/Shaders/Compiled/MSL/%s.msl", basePath, shaderFilename);
         format = SDL_GPU_SHADERFORMAT_MSL;
         entrypoint = "main0";
-    } else if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL)
-    {
+    } else if (backendFormats & SDL_GPU_SHADERFORMAT_DXIL) {
         SDL_snprintf(fullPath, sizeof(fullPath), "%sContent/Shaders/Compiled/DXIL/%s.dxil", basePath, shaderFilename);
         format = SDL_GPU_SHADERFORMAT_DXIL;
         entrypoint = "main";
-    } else
-    {
+    } else {
         SDL_Log("%s", "Unrecognized backend shader format!");
         return nullptr;
     }
 
     size_t codeSize;
     auto* code = static_cast<Uint8*>(SDL_LoadFile(fullPath, &codeSize));
-    if (code == nullptr)
-    {
+    if (code == nullptr) {
         SDL_Log("Failed to load compute shader from disk! %s", fullPath);
         return nullptr;
     }
@@ -320,8 +307,7 @@ SDL_GPUComputePipeline* Renderer::CreateComputePipelineFromShader(const char* ba
     newCreateInfo.format = format;
 
     SDL_GPUComputePipeline* pipeline = SDL_CreateGPUComputePipeline(device, &newCreateInfo);
-    if (pipeline == nullptr)
-    {
+    if (pipeline == nullptr) {
         SDL_Log("Failed to create compute pipeline!");
         SDL_free(code);
         return nullptr;
@@ -335,13 +321,15 @@ void Renderer::BeginCompute(SDL_GPUStorageTextureReadWriteBinding* storageTextur
                             Uint32 numStorageTextureBindings,
                             SDL_GPUStorageBufferReadWriteBinding* storageBufferBindings,
                             Uint32 numStorageBufferBindings) {
-    computePass = SDL_BeginGPUComputePass(
-        cmdBuffer, storageTextureBindings, numStorageTextureBindings, storageBufferBindings, numStorageBufferBindings);
+    computeCmdBuffer = SDL_AcquireGPUCommandBuffer(device); // We could use the same command buffer as the graphics pass
+    computePass = SDL_BeginGPUComputePass(computeCmdBuffer,
+                                          storageTextureBindings, numStorageTextureBindings,
+                                          storageBufferBindings, numStorageBufferBindings);
 
 }
 
 void Renderer::DispatchCompute(SDL_GPUComputePipeline* computePipeline, Uint32 groupCountX, Uint32 groupCountY,
-    Uint32 groupCountZ) {
+                               Uint32 groupCountZ) {
     SDL_BindGPUComputePipeline(computePass, computePipeline);
     SDL_DispatchGPUCompute(computePass, groupCountX, groupCountY, groupCountZ);
 }
@@ -352,5 +340,5 @@ void Renderer::ReleaseComputePipeline(SDL_GPUComputePipeline* computePipeline) c
 
 void Renderer::EndCompute() {
     SDL_EndGPUComputePass(computePass);
-    SDL_SubmitGPUCommandBuffer(cmdBuffer);
+    SDL_SubmitGPUCommandBuffer(computeCmdBuffer);
 }
