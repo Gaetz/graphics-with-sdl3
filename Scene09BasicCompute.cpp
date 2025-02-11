@@ -156,7 +156,8 @@ void Scene09BasicCompute::Load(Renderer& renderer) {
         .texture = screenTexture
     };
     renderer.BeginCompute(&storageTexture, 1, nullptr, 0);
-    renderer.DispatchCompute(computePipeline, w / 8, h / 8, 1);
+    renderer.BindComputePipeline(computePipeline);
+    renderer.DispatchCompute(w / 8, h / 8, 1);
     renderer.EndCompute();
     renderer.ReleaseComputePipeline(computePipeline);
 }
@@ -187,5 +188,4 @@ void Scene09BasicCompute::Unload(Renderer& renderer) {
     renderer.ReleaseSampler(sampler);
     renderer.ReleaseTexture(screenTexture);
     renderer.ReleaseGraphicsPipeline(graphicsPipeline);
-    renderer.ReleaseComputePipeline(computePipeline);
 }

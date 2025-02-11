@@ -23,7 +23,6 @@ void Renderer::Begin(SDL_GPUDepthStencilTargetInfo* depthStencilTargetInfo) {
     cmdBuffer = SDL_AcquireGPUCommandBuffer(device);
     if (cmdBuffer == nullptr) { SDL_Log("AcquireGPUCommandBuffer failed: %s", SDL_GetError()); }
 
-    SDL_GPUTexture* swapchainTexture;
     if (!SDL_WaitAndAcquireGPUSwapchainTexture(cmdBuffer, renderWindow, &swapchainTexture, nullptr, nullptr)) {
         SDL_Log("AcquireGPUSwapchainTexture failed: %s", SDL_GetError());
     }
@@ -48,6 +47,11 @@ void Renderer::Close() const {
     SDL_ReleaseWindowFromGPUDevice(device, renderWindow);
     SDL_DestroyGPUDevice(device);
 }
+
+void Renderer::SubmitCommandBuffer() const {
+    SDL_SubmitGPUCommandBuffer(cmdBuffer);
+}
+
 
 SDL_GPUShader* Renderer::LoadShader(
         const char* basePath,
@@ -328,10 +332,16 @@ void Renderer::BeginCompute(SDL_GPUStorageTextureReadWriteBinding* storageTextur
 
 }
 
-void Renderer::DispatchCompute(SDL_GPUComputePipeline* computePipeline, Uint32 groupCountX, Uint32 groupCountY,
-                               Uint32 groupCountZ) {
+void Renderer::BindComputePipeline(SDL_GPUComputePipeline* computePipeline) const {
     SDL_BindGPUComputePipeline(computePass, computePipeline);
+}
+
+void Renderer::DispatchCompute(Uint32 groupCountX, Uint32 groupCountY, Uint32 groupCountZ) {
     SDL_DispatchGPUCompute(computePass, groupCountX, groupCountY, groupCountZ);
+}
+
+void Renderer::PushComputeUniformData(uint32_t slot, const void* data, Uint32 size) const {
+    SDL_PushGPUComputeUniformData(computeCmdBuffer, slot, data, size);
 }
 
 void Renderer::ReleaseComputePipeline(SDL_GPUComputePipeline* computePipeline) const {
@@ -342,3 +352,31 @@ void Renderer::EndCompute() {
     SDL_EndGPUComputePass(computePass);
     SDL_SubmitGPUCommandBuffer(computeCmdBuffer);
 }
+
+void Renderer::AcquireCmdBufferAndSwapchainTexture(Uint32 width, Uint32 height) {
+    cmdBuffer = SDL_AcquireGPUCommandBuffer(device);
+    if (cmdBuffer == nullptr) { SDL_Log("AcquireGPUCommandBuffer failed: %s", SDL_GetError()); }
+
+    if (!SDL_WaitAndAcquireGPUSwapchainTexture(cmdBuffer, renderWindow, &swapchainTexture, &width, &height)) {
+        SDL_Log("AcquireGPUSwapchainTexture failed: %s", SDL_GetError());
+    }
+}
+
+void Renderer::BlitSwapchainTexture(Uint32 sourceWidth, Uint32 sourceHeight, SDL_GPUTexture* sourceTexture,
+                                    Uint32 destinationWidth, Uint32 destinationHeight, SDL_GPUFilter filter) const {
+    SDL_GPUBlitInfo blitInfo = { .source = { .texture = sourceTexture, .w = sourceWidth, .h = sourceHeight },
+            .destination = { .texture = swapchainTexture, .w = destinationWidth, .h = destinationHeight },
+            .load_op = SDL_GPU_LOADOP_DONT_CARE,
+            .filter = filter };
+    SDL_BlitGPUTexture(cmdBuffer, &blitInfo);
+}
+
+bool Renderer::IsSwapchainTextureValid() const {
+    return swapchainTexture != nullptr;
+}
+
+
+
+
+
+

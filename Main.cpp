@@ -15,6 +15,7 @@
 #include "Scene07TextureQuad.hpp"
 #include "Scene08TextureQuadMoving.hpp"
 #include "Scene09BasicCompute.hpp"
+#include "Scene10UniformsCompute.hpp"
 #include "Time.hpp"
 #include "Window.hpp"
 
@@ -27,7 +28,7 @@ int main(int argc, char **argv) {
     window.Init();
     renderer.Init(window);
 
-    auto scene = std::make_unique<Scene09BasicCompute>();
+    auto scene = std::make_unique<Scene10UniformsCompute>();
     scene->Load(renderer);
 
     bool isRunning { true };
