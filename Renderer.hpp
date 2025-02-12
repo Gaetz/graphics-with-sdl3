@@ -97,7 +97,7 @@ public:
     void UploadToTexture(const SDL_GPUTextureTransferInfo& source,
                          const SDL_GPUTextureRegion& destination, bool cycle) const;
 
-    void EndUploadToBuffer(SDL_GPUTransferBuffer* transferBuffer) const;
+    void EndUploadToBuffer(SDL_GPUTransferBuffer* transferBuffer, bool release = true) const;
 
     void ReleaseBuffer(SDL_GPUBuffer* buffer) const;
 
@@ -114,6 +114,8 @@ public:
                       SDL_GPUStorageBufferReadWriteBinding* storageBufferBindings, Uint32 numStorageBufferBindings);
 
     void BindComputePipeline(SDL_GPUComputePipeline* computePipeline) const;
+
+    void BindComputeStorageBuffers(Uint32 firstSlot, SDL_GPUBuffer* buffers, Uint32 numBuffers) const;
 
     void DispatchCompute(Uint32 groupCountX, Uint32 groupCountY, Uint32 groupCountZ);
 

@@ -233,15 +233,19 @@ void Renderer::BeginUploadToBuffer() {
 
 void Renderer::UploadToBuffer(const SDL_GPUTransferBufferLocation& source,
                               const SDL_GPUBufferRegion& destination,
-                              bool cycle) const { SDL_UploadToGPUBuffer(copyPass, &source, &destination, cycle); }
+                              bool cycle) const {
+    SDL_UploadToGPUBuffer(copyPass, &source, &destination, cycle);
+}
 
 void Renderer::UploadToTexture(const SDL_GPUTextureTransferInfo& source, const SDL_GPUTextureRegion& destination,
-                               bool cycle) const { SDL_UploadToGPUTexture(copyPass, &source, &destination, cycle); }
+                               bool cycle) const {
+    SDL_UploadToGPUTexture(copyPass, &source, &destination, cycle);
+}
 
-void Renderer::EndUploadToBuffer(SDL_GPUTransferBuffer* transferBuffer) const {
+void Renderer::EndUploadToBuffer(SDL_GPUTransferBuffer* transferBuffer, bool release) const {
     SDL_EndGPUCopyPass(copyPass);
     SDL_SubmitGPUCommandBuffer(uploadCmdBuf);
-    SDL_ReleaseGPUTransferBuffer(device, transferBuffer);
+    if (release) SDL_ReleaseGPUTransferBuffer(device, transferBuffer);
 }
 
 
@@ -336,6 +340,11 @@ void Renderer::BindComputePipeline(SDL_GPUComputePipeline* computePipeline) cons
     SDL_BindGPUComputePipeline(computePass, computePipeline);
 }
 
+void Renderer::BindComputeStorageBuffers(Uint32 firstSlot, SDL_GPUBuffer* buffers, Uint32 numBuffers) const {
+    SDL_BindGPUComputeStorageBuffers(computePass, firstSlot, &buffers, numBuffers);
+}
+
+
 void Renderer::DispatchCompute(Uint32 groupCountX, Uint32 groupCountY, Uint32 groupCountZ) {
     SDL_DispatchGPUCompute(computePass, groupCountX, groupCountY, groupCountZ);
 }
@@ -374,6 +383,7 @@ void Renderer::BlitSwapchainTexture(Uint32 sourceWidth, Uint32 sourceHeight, SDL
 bool Renderer::IsSwapchainTextureValid() const {
     return swapchainTexture != nullptr;
 }
+
 
 
 
